@@ -1,0 +1,45 @@
+.btn-add-task{
+  display: none;
+}
+
+.new-task {
+  position: relative;
+  margin-bottom:  5px;
+  cursor: pointer;
+}
+
+.task-priority-red {
+  background-color: $red;
+  display: inline-block;
+  height: 30px;
+  margin-left: 20px;
+  margin-right: 20px;
+  vertical-align: middle;
+  width: 5px;
+}
+
+.task-checkbox {
+  display: inline-block;
+  margin-top: 2px;
+  vertical-align: middle;
+}
+
+.task-text {
+  display: inline-block;
+  margin-bottom: 0;
+  margin-left: 20px;
+  vertical-align: middle;
+}
+
+.task-date {
+  display: inline-block;
+  position: absolute;
+  top: 18%;
+  right: 0;
+  margin-bottom: 0;
+  vertical-align: middle;
+}
+
+.task-checked {
+  background-color: $task-color;
+}

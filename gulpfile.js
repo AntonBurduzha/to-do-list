@@ -7,11 +7,17 @@ var autoprefixer = require('autoprefixer');
 gulp.task('watch', function () {
     gulp.watch('src/*.html', ['html']);
     gulp.watch('src/**/*.scss', ['sass']);
+    gulp.watch('src/scripts/*.js', ['script']);
 });
 
 gulp.task('html', function () {
     gulp.src('src/*.html')
         .pipe(gulp.dest('dist'))
+});
+
+gulp.task('script', function () {
+    gulp.src('src/scripts/*.js')
+        .pipe(gulp.dest('dist/js'))
 });
 
 gulp.task('sass-lint', function () {
@@ -54,4 +60,4 @@ gulp.task('vendor', function () {
         .pipe(gulp.dest('dist/js'));
 });
 
-gulp.task('build', ['html', 'sass', 'vendor', 'images', 'autoprefixer']);
+gulp.task('build', ['html', 'sass', 'script' ,'vendor', 'images', 'autoprefixer']);
