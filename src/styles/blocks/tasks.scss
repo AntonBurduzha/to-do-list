@@ -1,0 +1,27 @@
+.tasks-article {
+  padding: 5px;
+}
+
+.input-add-task {
+  width: 95%;
+}
+
+.btn-add-task {
+  background-color: $button-color;
+  border: 1px solid $button-hover;
+  color: $white;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: bold;
+  margin: 10px 25px 10px 0;
+
+  &:hover,
+  &:focus,
+  &:active {
+    &:hover {
+      background-color: $button-color;
+      border-color: $button-hover;
+      color: $white;
+    }
+  }
+}
