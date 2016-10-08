@@ -1,5 +1,8 @@
 'use strict'
 
+var mainWindow = document.querySelector('.main');
+mainWindow.style.height = document.documentElement.clientHeight + 'px';
+
 var addTaskForm = document.querySelector('.form-add-task');
 var addTaskInput = document.querySelector('.input-add-task');
 var addTaskBtn = document.querySelector('.btn-add-task');

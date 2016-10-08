@@ -31,7 +31,7 @@ gulp.task('script', function () {
 });
 
 gulp.task('sass-lint', function () {
-    return gulp.src('src/**/*.scss')
+    return gulp.src(['src/**/*.scss', '!src/styles/base.scss'])
         .pipe(sassLint({
             options: {
                 formatter: 'stylish'

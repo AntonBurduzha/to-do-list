@@ -2,8 +2,8 @@
   border: 1px solid transparent;
   border-bottom: 1px dotted $light-grey;
   border-top: 1px dotted $light-grey;
-  position: relative;
   cursor: pointer;
+  position: relative;
 
   &:hover {
     background-color: $task-color;

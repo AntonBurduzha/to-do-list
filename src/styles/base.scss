@@ -1,0 +1,38 @@
+.col-md-container {
+  padding: 0 10px;
+}
+
+.nav-tabs{
+  border-bottom: 1px solid $nav-tabs-border;
+}
+
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:focus,
+.nav-tabs > li.active > a:hover {
+  border-radius: 0;
+  border: 1px solid $nav-tabs-border;
+  border-bottom-color: transparent;
+  font-weight: bold;
+  margin-right: 0;
+  padding: 5px 15px;
+}
+
+.nav-tabs > li.list-item-description > a,
+.nav-tabs > li.list-item-description > a:focus,
+.nav-tabs > li.list-item-description > a:hover {
+  background-color: $body-color;
+}
+
+.nav-tabs > li > a {
+  border: 0;
+  border-radius: 0;
+  margin-left: 0;
+  padding: 5px 15px;
+}
+
+.nav-tabs > li.list-item-init {
+  display: inline-block;
+  padding-top: 5px;
+}
+
+//Bootstrap govno

@@ -1,0 +1,35 @@
+.tasks-container-description {
+  background-color: $body-color;
+  margin-top: 40px;
+}
+
+.tasks-description {
+  height: 123px;
+  padding-top: 30px;
+
+  .task-description-text {
+    display: inline-block;
+    font-family: 'Arial', sans-serif;
+    font-size: 18px;
+    vertical-align: middle;
+  }
+
+  .task-description-common {
+    font-family: 'Calibri', sans-serif;
+    font-size: 15px;
+    margin-bottom: 0;
+  }
+
+  .task-description-color {
+    height: 20px;
+    margin-left: 0;
+  }
+}
+
+.input-add-subtask {
+  width: 100%;
+}
+
+.btn-add-subtask {
+  margin: 10px 0 30px;
+}

@@ -11,17 +11,32 @@
 <body>
     <main class="container-fluid main">
         <div class="row tasks">
-            <div class="col-md-offset-2 col-md-5">
-                <div class="tasks-article">
-                    <form class="form-add-task">
-                        <input type="text" class="form-control input-add-task" placeholder="Добавить задачу...">
-                        <div class="text-right">
-                            <button class="btn-add-task">Добавить задачу</button>
+            <div class="col-md-offset-2 col-md-5 col-md-container">
+                <div class="tasks-container">
+                    <ul class="nav nav-tabs">
+                        <li class="pull-right"><a data-toggle="tab" href="#task-complete">Завершенные</a></li>
+                        <li class="active pull-right"><a data-toggle="tab" href="#task-nocomplete">Незавершенные</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="task-nocomplete" class="tab-pane fade in active">
+                            <div class="tasks-not-completed">
+                                <form class="form-add-task">
+                                    <input type="text" class="form-control input-add-task" placeholder="Добавить задачу...">
+                                    <div class="text-right">
+                                        <button class="btn-add-task">Добавить задачу</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                    </form>
+                        <div id="task-complete" class="tab-pane fade">
+                            <div class="tasks-completed">
+                                <p>Hello</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-5 col-md-container">
                 <div class="tasks-description">
                     <div class="task-description-color"></div>
                     <h4 class="task-description-text"></h4>
@@ -30,11 +45,34 @@
                     <p class="task-description-common task-description-tags"></p>
                     <p class="task-description-common task-description-date"></p>
                 </div>
+
+                <div class="tasks-container tasks-container-description">
+                    <ul class="nav nav-tabs nav-tabs-description">
+                        <li class="list-item-init">Подзадачи</li>
+                        <li class="pull-right list-item-description"><a data-toggle="tab" href="#subtask-complete">Завершенные</a></li>
+                        <li class="active pull-right list-item-description"><a data-toggle="tab" href="#subtask-nocomplete">Незавершенные</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="subtask-nocomplete" class="tab-pane fade in active">
+                            <div class="tasks-not-completed">
+                                <form class="form-add-task">
+                                    <input type="text" class="form-control input-add-task input-add-subtask" placeholder="Добавить задачу...">
+                                    <div class="text-right">
+                                        <button class="btn-add-task btn-add-subtask">Добавить задачу</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div id="subtask-complete" class="tab-pane fade">
+                            <div class="tasks-completed">
+                                <p>Hello</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
-
-
 
 
     <script src="js/jquery.min.js"></script>
