@@ -3,7 +3,7 @@
   border-bottom: 1px dotted $light-grey;
   border-top: 1px dotted $light-grey;
   position: relative;
-  width: 95%;
+  cursor: pointer;
 
   &:hover {
     background-color: $task-color;
@@ -19,11 +19,24 @@
   width: 3px;
 }
 
+.task-priority-red {
+  background-color: $red;
+  display: inline-block;
+  height: 30px;
+  margin: 2px 10px;
+  vertical-align: middle;
+  width: 3px;
+}
+
 .task-checkbox[type='checkbox'] {
   color: $white;
   display: inline-block;
   margin: 0;
   vertical-align: middle;
+
+  &:focus {
+    outline: 0;
+  }
 }
 
 .task-text {

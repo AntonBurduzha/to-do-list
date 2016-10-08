@@ -3,11 +3,21 @@ var sass = require('gulp-sass');
 var sassLint = require('gulp-sass-lint');
 var postcss = require('gulp-postcss');
 var autoprefixer = require('autoprefixer');
+var browserSync = require('browser-sync');
+var bsReload = require('browser-sync').reload;
 
-gulp.task('watch', function () {
-    gulp.watch('src/*.html', ['html']);
+gulp.task('browser-sync', function (){
+    browserSync.init({
+        server: {
+            baseDir: "./dist"
+        }
+    });
+});
+
+gulp.task('watch', ['browser-sync'], function () {
+    gulp.watch('src/*.html', ['html', bsReload]);
     gulp.watch('src/**/*.scss', ['sass']);
-    gulp.watch('src/scripts/*.js', ['script']);
+    gulp.watch('src/scripts/*.js', ['script', bsReload]);
 });
 
 gulp.task('html', function () {
@@ -38,6 +48,7 @@ gulp.task('sass',['sass-lint'], function () {
         .pipe(postcss([ autoprefixer({ browsers: ['last 2 versions'] }) ]))
         .pipe(gulp.dest('./dist/css'))
         .pipe(gulp.dest('dist/css/'))
+        .pipe(browserSync.reload({stream: true}));
 });
 
 gulp.task('images', function () {

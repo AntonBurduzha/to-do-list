@@ -9,18 +9,30 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="container-fluid">
+    <main class="container-fluid main">
         <div class="row tasks">
-            <div class="col-md-5 tasks-article">
-                <form class="form-add-task">
-                    <input type="text" class="form-control input-add-task" placeholder="Добавить задачу...">
-                    <div class="text-right">
-                        <button class="btn btn-default btn-add-task">Добавить задачу</button>
-                    </div>
-                </form>
+            <div class="col-md-offset-2 col-md-5">
+                <div class="tasks-article">
+                    <form class="form-add-task">
+                        <input type="text" class="form-control input-add-task" placeholder="Добавить задачу...">
+                        <div class="text-right">
+                            <button class="btn-add-task">Добавить задачу</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="tasks-description">
+                    <div class="task-description-color"></div>
+                    <h4 class="task-description-text"></h4>
+                    <p class="task-description-common task-description-state"></p>
+                    <p class="task-description-common task-description-priority"></p>
+                    <p class="task-description-common task-description-tags"></p>
+                    <p class="task-description-common task-description-date"></p>
+                </div>
             </div>
         </div>
-    </div>
+    </main>
 
 
 
