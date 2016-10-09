@@ -36,3 +36,18 @@
   }
 }
 
+.btn-task-control {
+  background-color: $white;
+  border: 1px solid $nav-tabs-border;
+  border-radius: 3px;
+  display: inline-block;
+  font-size: 20px;
+  padding: 1px 15px;
+  margin: 15px 10px 0 10px;
+  outline: 0;
+
+  &:hover,
+  &:focus {
+    background-color: $light-grey;
+  }
+}

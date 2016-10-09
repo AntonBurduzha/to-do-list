@@ -69,6 +69,8 @@ gulp.task('vendor', function () {
         .pipe(gulp.dest('dist/js'));
     gulp.src('node_modules/jquery/dist/jquery.min.js')
         .pipe(gulp.dest('dist/js'));
+    gulp.src('node_modules/bootstrap/dist/fonts/*')
+        .pipe(gulp.dest('dist/fonts'));
 });
 
 gulp.task('build', ['html', 'sass', 'script' ,'vendor', 'images', 'autoprefixer']);

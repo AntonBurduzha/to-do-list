@@ -19,7 +19,23 @@
                     </ul>
                     <div class="tab-content">
                         <div id="task-nocomplete" class="tab-pane fade in active">
-                            <div class="tasks-not-completed">
+                            <div class="tasks-not-completed text-center">
+                                <button class="btn-task-control btn-complete">
+                                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                    <a data-toggle="tooltip" data-placement="bottom" title="Завершить"></a>
+                                </button>
+                                <button class="btn-task-control btn-priority">
+                                    <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+                                </button>
+                                <button class="btn-task-control btn-calendar">
+                                    <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                </button>
+                                <button class="btn-task-control btn-tags">
+                                    <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+                                </button>
+                                <button class="btn-task-control btn-delete">
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                </button>
                                 <form class="form-add-task">
                                     <input type="text" class="form-control input-add-task" placeholder="Добавить задачу...">
                                     <div class="text-right">
@@ -55,7 +71,7 @@
                     <div class="tab-content">
                         <div id="subtask-nocomplete" class="tab-pane fade in active">
                             <div class="tasks-not-completed">
-                                <form class="form-add-task">
+                                <form class="form-add-task form-add-subtask">
                                     <input type="text" class="form-control input-add-task input-add-subtask" placeholder="Добавить задачу...">
                                     <div class="text-right">
                                         <button class="btn-add-task btn-add-subtask">Добавить задачу</button>

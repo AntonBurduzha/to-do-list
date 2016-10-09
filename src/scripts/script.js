@@ -7,17 +7,32 @@ var addTaskForm = document.querySelector('.form-add-task');
 var addTaskInput = document.querySelector('.input-add-task');
 var addTaskBtn = document.querySelector('.btn-add-task');
 
+var addSubtaskForm = document.querySelector('.form-add-subtask');
+var addSubtaskInput = document.querySelector('.input-add-subtask');
+var addSubtaskBtn = document.querySelector('.btn-add-subtask');
+
 function Task() {
     this.newTask = null;
     this.taskPriority = null;
     this.specificPriority = 'normal';
     this.taskCheck = null;
-    this.taskText = null;
     this.specificDate = null;
     this.taskDate = null;
     this.taskCompleted = false;
+    this.subtasks = []; //массив для подзадач
 }
 var task; //обьект задачи
+
+function Subtask(){
+    this.newSubtask = null;
+    this.subtaskPriority = null;
+    this.specificPriority = 'normal';
+    this.subtaskCheck = null;
+    this.subtaskCompleted = false;
+    this.subtaskText = null;
+}
+
+var subtask; //обьект подзадачи
 
 function TaskDescription() {
     this.name = null;
@@ -104,6 +119,35 @@ function showTaskDescription(event) {
             }
             //тэги
             taskDescriptionMap[i].date.textContent = 'Дата выполнения: ' + taskMap[i].specificDate.toLocaleDateString('ru');
+
+            //обновлять при новой задаче
+            addSubtaskBtn.addEventListener('click', function (event) {
+                if(addSubtaskInput.value.length > 0){
+                    subtask = new Subtask(); //блок создающий подзадачу
+                    subtask.newSubtask = document.createElement('div');
+                    subtask.newSubtask.classList.add('new-task');
+                    addSubtaskForm.parentNode.appendChild(subtask.newSubtask);
+
+                    subtask.subtaskPriority = document.createElement('div');
+                    subtask.subtaskPriority.classList.add('task-priority-grey');
+
+                    subtask.subtaskCheck = document.createElement('input');
+                    subtask.subtaskCheck.setAttribute('type', 'checkbox');
+                    subtask.subtaskCheck.classList.add('task-checkbox');
+
+                    subtask.subtaskText = document.createElement('p');
+                    subtask.subtaskText.textContent = addSubtaskInput.value;
+                    subtask.subtaskText.classList.add('task-text');
+
+                    subtask.newSubtask.appendChild(subtask.subtaskPriority);
+                    subtask.newSubtask.appendChild(subtask.subtaskCheck);
+                    subtask.newSubtask.appendChild(subtask.subtaskText);
+                    addSubtaskInput.value = '';
+                    taskMap[i].subtasks.push(subtask);
+                }
+
+                event.preventDefault();
+            });
             break;
         }
         else {
@@ -120,7 +164,6 @@ function showTaskDescription(event) {
         }
     }
 }
-
 
 
 
