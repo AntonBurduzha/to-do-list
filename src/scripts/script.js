@@ -11,6 +11,9 @@ var addSubtaskForm = document.querySelector('.form-add-subtask');
 var addSubtaskInput = document.querySelector('.input-add-subtask');
 var addSubtaskBtn = document.querySelector('.btn-add-subtask');
 
+var btnTaskComplete = document.querySelector('.btn-complete');
+var taskCompletedContainer = document.querySelector('.tasks-completed');
+
 //localStorage.clear();
 
 function Task() {
@@ -60,7 +63,8 @@ addTaskBtn.addEventListener('click', function (event) {
         addTaskInput.value = '';
         taskMap.push(currentTask);
 
-        localStorage.setItem('Idtask' + taskMap.length, JSON.stringify(currentTask));
+        var taskId = CreateTaskId();
+        localStorage.setItem(taskId, JSON.stringify(currentTask));
 
         taskDescription = new TaskDescription();//блок описывающий задачу
         taskDescription.name.textContent = '';
@@ -90,6 +94,28 @@ addSubtaskBtn.addEventListener('click', function (event) {
             localStorage.setItem('Idsubtask' + (i + 1) + taskMap[i].subtasks.length, JSON.stringify(currentSubtask));
         }
     }
+    event.preventDefault();
+});
+
+btnTaskComplete.addEventListener('click', function (event) {
+    for(var i = 0; i < taskMap.length; i++){
+        if(taskMap[i].taskCheck.checked){
+            var completedTask = new Task();
+            completedTask = taskMap[i];
+            taskMap[i].newTask.style.display = 'none';
+            var completedTaskBody = taskMap[i].newTask.cloneNode(true);
+            completedTaskBody.style.display = 'block';
+            taskCompletedContainer.appendChild(completedTaskBody);
+            localStorage.removeItem('IdTask' + (i + 1));
+            for(var j = 0; j < localStorage.length; j++){
+                if(localStorage.key(j).indexOf('Idsubtask' + (i + 1)) == 0){
+                    localStorage.removeItem(localStorage.key(j));
+                    j--;
+                }
+            }
+        }
+    }
+
     event.preventDefault();
 });
 
@@ -170,7 +196,7 @@ function ShowTasks() { //загружает обьеты tasks из locale stora
     if (localStorage.length > 0){
         for(var i = 0; i < localStorage.length; i++){
             var key = localStorage.key(i);
-            if(key.indexOf('Idtask') == 0){
+            if(key.indexOf('IdTask') == 0){
                 task = new Task(); //блок создающий задачу
                 task = JSON.parse(localStorage.getItem(key));
                 var currentTask = CreateTask(task);
@@ -223,16 +249,31 @@ function CreateSubtask(subtask) { //описывает обьект подзда
     subtask.subtaskPriority = document.createElement('div');
     subtask.subtaskPriority.classList.add('task-priority-grey');
 
-    subtask.subtaskCheck = document.createElement('input');
-    subtask.subtaskCheck.setAttribute('type', 'checkbox');
-    subtask.subtaskCheck.classList.add('task-checkbox');
-
     subtask.subtaskText = document.createElement('p');
     subtask.subtaskText.textContent = subtask.specificText;
     subtask.subtaskText.classList.add('task-text');
 
     subtask.newSubtask.appendChild(subtask.subtaskPriority);
-    subtask.newSubtask.appendChild(subtask.subtaskCheck);
     subtask.newSubtask.appendChild(subtask.subtaskText);
     return subtask;
+}
+
+function CreateTaskId() {
+    var uniqueId = 1;
+    if(localStorage.length == 0){
+        return 'IdTask' + uniqueId;
+    }
+    else if(localStorage.length == 1){
+        if(localStorage.key(0) == 'IdTask' + uniqueId){
+            return 'IdTask' + (uniqueId + 1);
+        }
+    }
+    else if(localStorage.length > 1){
+        for(var i = 0; i < localStorage.length; i++){
+            if(localStorage.key(i).indexOf('IdTask') == 0 && parseInt(localStorage.key(i).charAt(6)) == uniqueId){
+                uniqueId++;
+            }
+        }
+        return 'IdTask' + uniqueId;
+    }
 }
