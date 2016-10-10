@@ -5,6 +5,7 @@
   border-top: 1px dotted $light-grey;
   cursor: pointer;
   position: relative;
+  text-align: left;
 
   &:hover {
     background-color: $task-color;
