@@ -15,10 +15,11 @@ function Task(params) {
     this.taskCompleted = params.taskCompleted || false;
     this.subtasks = params.subtasks || []; //массив для подзадач
     this.taskDescription = params.taskDescription || {
-            name: document.querySelector('.task-description-text'),
-            completed: document.querySelector('.task-description-state'),
-            priority: document.querySelector('.task-description-priority'),
-            date: document.querySelector('.task-description-date')
+            icon: $('.task-description-color'),
+            name: $('.task-description-text'),
+            completed: $('.task-description-state'),
+            priority: $('.task-description-priority'),
+            date: $('.task-description-date')
         }
 }
 
@@ -31,27 +32,23 @@ function Subtask(params){
     this.specificText = params.specificText || '';
 }
 
-var taskMap = []; //хранит задачи
-
-var completedTasks = [];
-var notCompletedTasks = [];
-
 showTasks();
 createEventListeners();
 
 function createEventListeners() {
-    var mainWindow = document.querySelector('.main');
+    var mainWindow = $('.main');
     mainWindow.style.height = document.documentElement.clientHeight + 'px';
 
-    var addTaskInput = document.querySelector('.input-add-task');
-    var addTaskBtn = document.querySelector('.btn-add-task');
-    var addSubtaskInput = document.querySelector('.input-add-subtask');
-    var addSubtaskBtn = document.querySelector('.btn-add-subtask');
-    var btnTaskComplete = document.querySelector('.btn-complete');
+    var addTaskInput = $('.input-add-task');
+    var addTaskBtn = $('.btn-add-task');
+    var addSubtaskInput = $('.input-add-subtask');
+    var addSubtaskBtn = $('.btn-add-subtask');
+    var btnTaskComplete = $('.btn-complete');
 
     addTaskBtn.addEventListener('click', addTask);
     //addSubtaskBtn.addEventListener('click', addSubTask);
     //btnTaskComplete.addEventListener('click', completeTask);
+    document.body.addEventListener('click', deleteTaskDescription);
 
     function addTask(event) {
         if(addTaskInput.value.length > 0){
@@ -89,7 +86,7 @@ function createEventListeners() {
     }*/
 
     /*function completeTask() {
-        var taskCompletedContainer = document.querySelector('.tasks-completed');
+        var taskCompletedContainer = $('.tasks-completed');
 
         for(var i = 0; i < taskMap.length; i++){
             if(taskMap[i].taskCheck.checked){
@@ -119,12 +116,12 @@ function createEventListeners() {
 }*/
 
 function createTask(task) { //описывает обьект task
-    var addTaskForm = document.querySelector('.form-add-task');
+    var addTaskForm = $('.form-add-task');
 
     task.newTask = document.createElement('div');
     task.newTask.classList.add('new-task');
     addTaskForm.parentNode.appendChild(task.newTask);
-    task.newTask.addEventListener('click', showTaskDescription);
+    //task.newTask.addEventListener('click', showTaskDescription);
 
     task.taskPriority = document.createElement('div');
     task.taskPriority.classList.add('task-priority-grey');
@@ -147,11 +144,40 @@ function createTask(task) { //описывает обьект task
     task.newTask.appendChild(task.taskCheck);
     task.newTask.appendChild(task.taskText);
     task.newTask.appendChild(task.taskDate);
+
+    applyShowDescription(task);
+    function applyShowDescription(task) {
+        var statusCompleted = 'Статус: завершен';
+        var statusNotCompleted = 'Статус: незавершеy';
+        var priorityHigh = 'Приоритет: высокий';
+        var priorityNormal = 'Приоритет: нормальный';
+        var date = 'Дата выполнения:';
+
+        task.newTask.addEventListener('click', function() {
+            task.taskDescription = createTaskDescription(task.taskDescription);
+            task.taskDescription.name.textContent = task.specificText;
+            task.taskCompleted == false ? task.taskDescription.completed.textContent = statusNotCompleted
+                : task.taskDescription.completed.textContent = statusCompleted;
+
+            if(task.specificPriority === 'normal'){
+                task.taskDescription.priority.textContent = priorityNormal;
+                task.taskDescription.icon.classList.add('task-priority-grey');
+            }
+            else {
+                task.taskDescription.priority.textContent = priorityHigh;
+                task.taskDescription.icon.classList.add('task-priority-red');
+            }
+            var descriptionDate = Date.parse(task.specificDate);
+            task.taskDescription.date.textContent = date + (new Date (descriptionDate).toLocaleDateString('ru'));
+        });
+        return task;
+    }
+
     return task;
 }
 
 function showTasks() { //загружает обьеты tasks из locale storage
-    var taskCompletedContainer = document.querySelector('.tasks-completed');
+    var taskCompletedContainer = $('.tasks-completed');
 
     if (localStorage.length > 0){
         for(var i = 0; i < localStorage.length; i++){
@@ -181,57 +207,23 @@ function showTasks() { //загружает обьеты tasks из locale stora
 }
 
 function clearTaskDescription(taskDescription) {
-    taskDescription.name.textContent = '';
-    taskDescription.completed.textContent = '';
-    taskDescription.priority.textContent = '';
-    taskDescription.date.textContent = '';
+    for(var elements in taskDescription){
+        taskDescription[elements].textContent = '';
+    }
     return taskDescription;
 }
 
 function createTaskDescription(taskDescription) {
-    taskDescription.name = document.querySelector('.task-description-text');
-    taskDescription.completed = document.querySelector('.task-description-state');
-    taskDescription.priority = document.querySelector('.task-description-priority');
-    taskDescription.date = document.querySelector('.task-description-date');
+    taskDescription.icon = $('.task-description-color');
+    taskDescription.name = $('.task-description-text');
+    taskDescription.completed = $('.task-description-state');
+    taskDescription.priority = $('.task-description-priority');
+    taskDescription.date = $('.task-description-date');
     return taskDescription;
 }
 
-function showTaskDescription(event) {
-    var taskArray = currentTasks('notcompleted');
-
-    for(var i = 0; i < taskArray.length; i++){
-        if(event.target){
-            taskArray[i].taskDescription = createTaskDescription(taskArray[i].taskDescription);
-            taskArray[i].taskDescription.name.textContent = taskArray[i].specificText;
-            taskArray[i].taskCompleted == false ? taskArray[i].taskDescription.completed.textContent = 'Статус: незавершен'
-                : taskArray[i].taskDescription.completed.textContent = 'Статус: завершен';
-
-            if(taskArray[i].specificPriority == 'normal'){
-                taskArray[i].taskDescription.priority.textContent = 'Приоритет: нормальный';
-                taskArray[i].taskDescription.priority.parentNode.firstElementChild.classList.add('task-priority-grey');
-            }
-            else {
-                taskArray[i].taskDescription.priority.textContent = 'Приоритет: высокий';
-                taskArray[i].taskDescription.priority.parentNode.firstElementChild.classList.add('task-priority-red');
-            }
-            var descriptionDate = Date.parse(taskArray[i].specificDate);
-            taskArray[i].taskDescription.date.textContent = 'Дата выполнения: ' + (new Date (descriptionDate).toLocaleDateString('ru'));
-            break;
-        }
-        else {
-            if(taskArray[i].specificPriority == 'normal'){
-                //taskArray[i].taskDescription.priority.parentNode.firstChild.classList.remove('task-priority-grey');
-            }
-            else {
-                taskArray[i].taskDescription.priority.parentNode.firstElementChild.classList.remove('task-priority-red');
-            }
-            taskArray[i].taskDescription = clearTaskDescription(taskArray[i].taskDescription);
-        }
-    }
-}
-
 /*function createSubtask(subtask) { //описывает обьект подздачи
-    var addSubtaskForm = document.querySelector('.form-add-subtask');
+    var addSubtaskForm = $('.form-add-subtask');
     subtask.newSubtask = document.createElement('div');
     subtask.newSubtask.classList.add('new-task');
     subtask.newSubtask.classList.add('new-subtask');
@@ -281,17 +273,23 @@ function showTaskDescription(event) {
 */
 
 function currentTasks(type) {
-    var currentTasksArray = [];
-    if(localStorage.length > 0){
-        for(var i = 0; i < localStorage.length; i++){
-            var key = localStorage.key(i);
-            if(key == type){
-                currentTasksArray = JSON.parse(localStorage.getItem(type));
-                return currentTasksArray;
+    return localStorage.length > 0 ? JSON.parse(localStorage.getItem(type)) : [];
+}
+
+function deleteTaskDescription(event) {
+    var taskNodeArray = document.querySelectorAll('.new-task');
+    var taskNodeDescription = $('.tasks-description').children;
+    for(var i = 0; i < taskNodeArray.length; i++){
+        if(!event.target.classList.contains('new-task')){
+            taskNodeDescription[0].classList.remove('task-priority-grey');
+            for(var j = 0; j < taskNodeDescription.length; j++){
+                taskNodeDescription[j].textContent = '';
             }
+            break;
         }
     }
-    else{
-        return currentTasksArray;
-    }
+}
+
+function $(class_selector) {
+    return document.querySelector(class_selector);
 }
