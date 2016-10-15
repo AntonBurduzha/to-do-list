@@ -7,9 +7,9 @@
   position: relative;
   text-align: left;
 
-  &:hover {
+  /*&:hover {
     background-color: $task-color;
-  }
+  }*/
 }
 
 .task-priority-grey {
@@ -64,4 +64,8 @@
 
 .task-text-checked {
   font-weight: bold;
+}
+
+.task-terminated {
+  background-color: $task-color;
 }

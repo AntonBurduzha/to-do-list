@@ -36,19 +36,83 @@ showTasks();
 createEventListeners();
 
 function createEventListeners() {
+    //application clien heigth
     var mainWindow = $('.main');
-    mainWindow.style.height = document.documentElement.clientHeight + 'px';
+    var searchPanel = $('.search');
+    var tasksBody = parseInt(window.getComputedStyle($('.tasks'), null).getPropertyValue('padding-top'));
+    var tasksContainer = $('.tasks-container');
+    mainWindow.style.height = document.documentElement.clientHeight - searchPanel.offsetHeight + 'px';
+    tasksContainer.style.height = document.documentElement.clientHeight - searchPanel.offsetHeight - tasksBody + 'px';
 
+    //add task/subtask
     var addTaskInput = $('.input-add-task');
     var addTaskBtn = $('.btn-add-task');
     var addSubtaskInput = $('.input-add-subtask');
     var addSubtaskBtn = $('.btn-add-subtask');
+
+    //task searching
+    var inputSearch = $('.input-search-task');
+    var btnSearch = $('.btn-search');
+    var notcompledTaskContainer = $('.tasks-not-completed');
+    var searchFailMsg = document.createElement('p');
+    searchFailMsg.textContent = 'Ничего не найдено';
+    searchFailMsg.classList.add('text-search-fail');
+    notcompledTaskContainer.appendChild(searchFailMsg);
+
+    //completed task
     var btnTaskComplete = $('.btn-complete');
+    //var terminatedTasks = document.querySelectorAll('.task-terminated');
+
+    //click on completed/not completed tabs
+    var tasksNavTab = $('.tasks-nav-tabs');
+    var tasksCompleteTab = $('.tasks-complete-tab');
+    var tasksNoCompleteTab = $('.tasks-nocomplete-tab');
 
     addTaskBtn.addEventListener('click', addTask);
-    //addSubtaskBtn.addEventListener('click', addSubTask);
-    //btnTaskComplete.addEventListener('click', completeTask);
-    document.body.addEventListener('click', deleteTaskDescription);
+    addSubtaskBtn.addEventListener('click', addSubTask);
+    btnTaskComplete.addEventListener('click', completeTask);
+    tasksNavTab.addEventListener('click', clearTaskInfo);
+    btnSearch.addEventListener('click', searchCurrentTasks);
+
+    function searchCurrentTasks(event) {
+        var taskNodeArray = document.querySelectorAll('.new-task');
+        var subtaskNodeArray = document.querySelectorAll('.new-subtask');
+        var taskCompletedNodeArrray = document.querySelectorAll('.task-terminated');
+        searchFailMsg.style.display = 'none';
+
+        var taskCurrentNodeLength = taskNodeArray.length - subtaskNodeArray.length - taskCompletedNodeArrray.length;
+        for(var i = 0; i < taskNodeArray.length; i++){
+            taskNodeArray[i].style.display = 'none';
+            if(inputSearch.value.length > 0 && taskNodeArray[i].childNodes[2].textContent.indexOf(inputSearch.value) + 1){
+                taskNodeArray[i].style.display = 'block';
+            }
+            else if(inputSearch.value.length < 1){
+                taskNodeArray[i].style.display = 'block';
+            }
+        }
+        var displayTaskCounter = 0; //show search fail message
+        for(var i = 0; i < taskCurrentNodeLength; i++){
+            var tasksBodyHidden = window.getComputedStyle(taskNodeArray[i], null).getPropertyValue('display');
+            tasksBodyHidden === 'none' ? displayTaskCounter++ : displayTaskCounter = 0;
+        }
+        if(displayTaskCounter === taskCurrentNodeLength){
+            searchFailMsg.style.display = 'block';
+        }
+        event.preventDefault();
+    }
+
+    function clearTaskInfo(event) {
+        if(event.target == tasksCompleteTab || event.target.parentNode == tasksCompleteTab
+            || event.target.parentNode == tasksNoCompleteTab || event.target == tasksNoCompleteTab){
+            clearTaskDescription();
+            clearSubtaskDescription();
+            var taskNodeNoCompleted = $('.task-checked');
+            if(taskNodeNoCompleted !== null){
+                taskNodeNoCompleted.classList.remove('task-checked');
+                taskNodeNoCompleted.childNodes[2].classList.remove('task-text-checked');
+            }
+        }
+    }
 
     function addTask(event) {
         if(addTaskInput.value.length > 0){
@@ -65,63 +129,66 @@ function createEventListeners() {
         event.preventDefault();
     }
 
-    /*function addSubTask(event) {
-        var checkCounter = 0;
-        for(var i = 0; i < taskMap.length; i++){
-            if(taskMap[i].taskCheck.checked){
-                checkCounter++;
-            }
-        }
-        for(var i = 0; i < taskMap.length; i++){
-            if(addSubtaskInput.value.length > 0 && (checkCounter == 1 && taskMap[i].taskCheck.checked)){
-                var subtask = new Subtask(); //блок создающий подзадачу
+    function addSubTask(event) {
+        var taskArray = currentTasks('notcompleted');
+        var taskNodeArray = document.querySelectorAll('.new-task');
+        for(var i = 0; i < taskNodeArray.length; i++){
+            if(addSubtaskInput.value.length > 0 && taskNodeArray[i].classList.contains('task-checked')){
+                var subtask = new Subtask();
                 subtask.specificText = addSubtaskInput.value;
-                var currentSubtask = createSubtask(subtask);
+                subtask = createSubtask(subtask);
                 addSubtaskInput.value = '';
-                taskMap[i].subtasks.push(currentSubtask);
-                localStorage.setItem('Idsubtask' + (i + 1) + taskMap[i].subtasks.length, JSON.stringify(currentSubtask));
+                taskArray[i].subtasks.push(subtask);
+                localStorage.setItem('notcompleted', JSON.stringify(taskArray));
             }
         }
         event.preventDefault();
-    }*/
+    }
 
-    /*function completeTask() {
+    function completeTask() {
         var taskCompletedContainer = $('.tasks-completed');
+        var taskNotCompletedContainer = $('.tasks-not-completed');
+        var subtaskNotCompletedContainer = $('.subtasks-not-completed');
+        var taskNotCompletedNodeArray = document.querySelectorAll('.new-task');
+        var subtaskNotCompletedNodeArray = document.querySelectorAll('.new-subtask');
 
-        for(var i = 0; i < taskMap.length; i++){
-            if(taskMap[i].taskCheck.checked){
-                taskMap[i].taskCompleted = true;
-                completedTasks.push(taskMap[i]);
-                localStorage.setItem('completed', JSON.stringify(completedTasks));
-                notCompletedTasks = JSON.parse(localStorage.getItem('notcompleted'));
-                notCompletedTasks[i].taskCompleted = true;
-                localStorage.setItem('notcompleted', JSON.stringify(notCompletedTasks));
-                taskMap[i].newTask.style.display = 'none';
-                var completedTaskBody = taskMap[i].newTask.cloneNode(true);
-                completedTaskBody.style.display = 'block';
-                taskCompletedContainer.appendChild(completedTaskBody);
+        var taskNotCompletedArray = currentTasks('notcompleted');
+        var taskCompletedArray = currentTasks('completed');
+        taskCompletedArray === null ? taskCompletedArray = [] : taskCompletedArray = taskCompletedArray; //if null => []
+        var taskCheckCounter = taskCheckedCounter();
+        var newCompletedTask;
+        for(var i = 0; i < taskNotCompletedNodeArray.length - subtaskNotCompletedNodeArray.length; i++){
+            if(taskNotCompletedNodeArray[i].childNodes[1].checked && taskCheckCounter == 1){
+                taskNotCompletedNodeArray[i].style.display = 'none';//hide task
+                newCompletedTask = taskNotCompletedNodeArray[i].cloneNode(true);//clone in new task
+                taskNotCompletedContainer.removeChild(taskNotCompletedNodeArray[i]);//remove task node
+                newCompletedTask.style.display = 'block';//show new task node
+                newCompletedTask.classList.add('task-terminated');
+                newCompletedTask.childNodes[1].checked = false;//completed task unchecked
+                newCompletedTask.childNodes[2].classList.remove('task-text-checked'); //and not bold text
+                taskCompletedContainer.appendChild(newCompletedTask);//add new task node to completed tab
+                taskCompletedArray.push(taskNotCompletedArray[i]);
+                localStorage.setItem('completed', JSON.stringify(taskCompletedArray)); //add completed task to ls
+
+                taskNotCompletedArray.splice(i, 1);//remove from not completed
+                localStorage.setItem('notcompleted', JSON.stringify(taskNotCompletedArray));//rewrite
+                for(var j = 0; j < subtaskNotCompletedNodeArray.length; j++){
+                    subtaskNotCompletedContainer.removeChild(subtaskNotCompletedNodeArray[j]);//del all subtask nodes of current task
+                }
+                clearTaskDescription();//<= name =)
             }
         }
 
         event.preventDefault();
-    }*/
+    }
 }
 
-/*function checkTask(event) {
-    var target = event.target;
-    var targetParent = target.parentNode;
-    targetParent.classList.toggle('task-checked');
-    targetParent.childNodes[2].classList.toggle('task-text-checked');
-    showSubtasks();
-}*/
-
-function createTask(task) { //описывает обьект task
+function createTask(task) {
     var addTaskForm = $('.form-add-task');
 
     task.newTask = document.createElement('div');
     task.newTask.classList.add('new-task');
     addTaskForm.parentNode.appendChild(task.newTask);
-    //task.newTask.addEventListener('click', showTaskDescription);
 
     task.taskPriority = document.createElement('div');
     task.taskPriority.classList.add('task-priority-grey');
@@ -136,7 +203,7 @@ function createTask(task) { //описывает обьект task
     task.taskText.classList.add('task-text');
 
     task.taskDate = document.createElement('p');
-    task.taskDate.classList.add('task-date');//указать позже день в зависимости от даты
+    task.taskDate.classList.add('task-date');
     var today = new Date();
     task.specificDate = today;
 
@@ -148,27 +215,49 @@ function createTask(task) { //описывает обьект task
     applyShowDescription(task);
     function applyShowDescription(task) {
         var statusCompleted = 'Статус: завершен';
-        var statusNotCompleted = 'Статус: незавершеy';
+        var statusNotCompleted = 'Статус: незавершен';
         var priorityHigh = 'Приоритет: высокий';
         var priorityNormal = 'Приоритет: нормальный';
         var date = 'Дата выполнения:';
 
         task.newTask.addEventListener('click', function() {
-            task.taskDescription = createTaskDescription(task.taskDescription);
-            task.taskDescription.name.textContent = task.specificText;
-            task.taskCompleted == false ? task.taskDescription.completed.textContent = statusNotCompleted
-                : task.taskDescription.completed.textContent = statusCompleted;
+            var taskNodeArray = document.querySelectorAll('.new-task');
+            var subtaskNodeArray = document.querySelectorAll('.new-subtask');
+            var taskCheckCounter = taskCheckedCounter();
+            for(var i = 0; i < taskNodeArray.length - subtaskNodeArray.length; i++){
+                taskNodeArray[i].classList.remove('task-checked');
+                if(taskNodeArray[i].childNodes[2].classList.contains('task-text-checked')){
+                    taskNodeArray[i].childNodes[2].classList.remove('task-text-checked');
+                }
+            }
+            if(!(taskCheckCounter > 1)){
+                task.newTask.classList.add('task-checked');
+                task.newTask.childNodes[2].classList.add('task-text-checked');
+                for(var i = 0; i < taskNodeArray.length; i++){
+                    if(!task.newTask.classList.contains('.task-checked')){
+                        for(var j = 0; j < subtaskNodeArray.length; j++){
+                            subtaskNodeArray[j].remove();
+                        }
+                    }
+                }
+                task.taskDescription = createTaskDescription(task.taskDescription);
+                task.taskDescription.name.textContent = task.specificText;
+                task.taskCompleted == false ? task.taskDescription.completed.textContent = statusNotCompleted
+                    : task.taskDescription.completed.textContent = statusCompleted;
 
-            if(task.specificPriority === 'normal'){
-                task.taskDescription.priority.textContent = priorityNormal;
-                task.taskDescription.icon.classList.add('task-priority-grey');
+                if(task.specificPriority === 'normal'){
+                    task.taskDescription.priority.textContent = priorityNormal;
+                    task.taskDescription.icon.classList.add('task-priority-grey');
+                }
+                else {
+                    task.taskDescription.priority.textContent = priorityHigh;
+                    task.taskDescription.icon.classList.add('task-priority-red');
+                }
+                var descriptionDate = Date.parse(task.specificDate);
+                task.taskDescription.date.textContent = date + (new Date (descriptionDate).toLocaleDateString('ru'));
+                showSubtasks(task);
             }
-            else {
-                task.taskDescription.priority.textContent = priorityHigh;
-                task.taskDescription.icon.classList.add('task-priority-red');
-            }
-            var descriptionDate = Date.parse(task.specificDate);
-            task.taskDescription.date.textContent = date + (new Date (descriptionDate).toLocaleDateString('ru'));
+
         });
         return task;
     }
@@ -176,8 +265,37 @@ function createTask(task) { //описывает обьект task
     return task;
 }
 
+function createTaskDescription(taskDescription) {
+    taskDescription.icon = $('.task-description-color');
+    taskDescription.name = $('.task-description-text');
+    taskDescription.completed = $('.task-description-state');
+    taskDescription.priority = $('.task-description-priority');
+    taskDescription.date = $('.task-description-date');
+    return taskDescription;
+}
+
+function createSubtask(subtask) { //описывает обьект подздачи
+    var addSubtaskForm = $('.form-add-subtask');
+    subtask.newSubtask = document.createElement('div');
+    subtask.newSubtask.classList.add('new-task');
+    subtask.newSubtask.classList.add('new-subtask');
+    addSubtaskForm.parentNode.appendChild(subtask.newSubtask);
+
+    subtask.subtaskPriority = document.createElement('div');
+    subtask.subtaskPriority.classList.add('task-priority-grey');
+
+    subtask.subtaskText = document.createElement('p');
+    subtask.subtaskText.textContent = subtask.specificText;
+    subtask.subtaskText.classList.add('task-text');
+
+    subtask.newSubtask.appendChild(subtask.subtaskPriority);
+    subtask.newSubtask.appendChild(subtask.subtaskText);
+    return subtask;
+}
+
 function showTasks() { //загружает обьеты tasks из locale storage
     var taskCompletedContainer = $('.tasks-completed');
+    var taskNotCompletedContainer = $('.tasks-not-completed');
 
     if (localStorage.length > 0){
         for(var i = 0; i < localStorage.length; i++){
@@ -198,7 +316,10 @@ function showTasks() { //загружает обьеты tasks из locale stora
                     task = createTask(task);
                     task.newTask.style.display = 'none';
                     var completedTaskBody = task.newTask.cloneNode(true);
+                    taskNotCompletedContainer.removeChild(task.newTask);
                     completedTaskBody.style.display = 'block';
+                    completedTaskBody.classList.add('task-checked');
+                    completedTaskBody.classList.add('task-terminated');
                     taskCompletedContainer.appendChild(completedTaskBody);
                 }
             }
@@ -206,90 +327,61 @@ function showTasks() { //загружает обьеты tasks из locale stora
     }
 }
 
+function showSubtasks(event) {
+    var taskArray = currentTasks('notcompleted');
+    var taskArra = currentTasks('completed');
+    var taskNodeArray = document.querySelectorAll('.new-task');
+    for(var i = 0; i < taskNodeArray.length; i++){
+        if(localStorage.length > 0 && event.newTask == taskNodeArray[i] && !taskNodeArray[i].classList.contains('task-terminated')){
+            for(var j = 0; j < taskArray[i].subtasks.length; j++){
+                var subtask = new Subtask(taskArray[i].subtasks[j]);
+                subtask = createSubtask(subtask);
+            }
+        }
+    }
+}
+
+
 function clearTaskDescription(taskDescription) {
-    for(var elements in taskDescription){
-        taskDescription[elements].textContent = '';
+    if(arguments.length == 1){
+        for(var elements in taskDescription){
+            taskDescription[elements].textContent = '';
+        }
+        return taskDescription;
     }
-    return taskDescription;
-}
-
-function createTaskDescription(taskDescription) {
-    taskDescription.icon = $('.task-description-color');
-    taskDescription.name = $('.task-description-text');
-    taskDescription.completed = $('.task-description-state');
-    taskDescription.priority = $('.task-description-priority');
-    taskDescription.date = $('.task-description-date');
-    return taskDescription;
-}
-
-/*function createSubtask(subtask) { //описывает обьект подздачи
-    var addSubtaskForm = $('.form-add-subtask');
-    subtask.newSubtask = document.createElement('div');
-    subtask.newSubtask.classList.add('new-task');
-    subtask.newSubtask.classList.add('new-subtask');
-    addSubtaskForm.parentNode.appendChild(subtask.newSubtask);
-
-    subtask.subtaskPriority = document.createElement('div');
-    subtask.subtaskPriority.classList.add('task-priority-grey');
-
-    subtask.subtaskText = document.createElement('p');
-    subtask.subtaskText.textContent = subtask.specificText;
-    subtask.subtaskText.classList.add('task-text');
-
-    subtask.newSubtask.appendChild(subtask.subtaskPriority);
-    subtask.newSubtask.appendChild(subtask.subtaskText);
-    return subtask;
-}
-
-/*function showSubtasks() { //загружает обьеты subtasks из locale storage
-    var checkCounter = 0;
-    for(var i = 0; i < taskMap.length; i++){
-        if(taskMap[i].taskCheck.checked){
-            checkCounter++;
+    else{
+        var task = new Task();
+        for(var elements in task.taskDescription){
+            task.taskDescription[elements].textContent = '';
         }
+        task.taskDescription.icon.classList.remove('task-priority-grey');
     }
-    for(var i = 0; i < taskMap.length; i++){
-        if(localStorage.length > 0 && (checkCounter == 1 && taskMap[i].taskCheck.checked)){
-            for(var j = 0; j < localStorage.length; j++){
-                var key = localStorage.key(j);
-                if(key.indexOf('Idsubtask') == 0 && parseInt(key.charAt(9), 10) == (i + 1)){
-                    var subtask = new Subtask(JSON.parse(localStorage.getItem(key))); //блок создающий задачу
-                    var currentSubtask = createSubtask(subtask);
-                    taskMap[i].subtasks.push(currentSubtask);
-                }
-            }
-        }
-        else{
-            for(var k = 0; k < taskMap[i].subtasks.length; k++){
-                taskMap[i].subtasks[k].newSubtask.classList.add('delete');
-            }
-            var deletedSubtasks = document.querySelectorAll('.delete');
-            for(var k = 0; k < deletedSubtasks.length; k++){
-                deletedSubtasks[k].remove();
-            }
-        }
+
+}
+
+function clearSubtaskDescription() {
+    var subtasksNotCompleteContainer = $('.subtasks-not-completed');
+    var allNodeSubtasks = document.querySelectorAll('.new-subtask');
+    for(var i = 0; i < allNodeSubtasks.length; i++){
+        subtasksNotCompleteContainer.removeChild(allNodeSubtasks[i]);
     }
 }
-*/
+
 
 function currentTasks(type) {
     return localStorage.length > 0 ? JSON.parse(localStorage.getItem(type)) : [];
 }
 
-function deleteTaskDescription(event) {
-    var taskNodeArray = document.querySelectorAll('.new-task');
-    var taskNodeDescription = $('.tasks-description').children;
-    for(var i = 0; i < taskNodeArray.length; i++){
-        if(!event.target.classList.contains('new-task')){
-            taskNodeDescription[0].classList.remove('task-priority-grey');
-            for(var j = 0; j < taskNodeDescription.length; j++){
-                taskNodeDescription[j].textContent = '';
-            }
-            break;
-        }
-    }
-}
-
 function $(class_selector) {
     return document.querySelector(class_selector);
+}
+
+function taskCheckedCounter() {
+    var taskCheckCounter = 0;
+    var taskNodeArray = document.querySelectorAll('.new-task');
+    var subtaskNodeArray = document.querySelectorAll('.new-subtask');
+    for(var i = 0; i < taskNodeArray.length - subtaskNodeArray.length; i++){
+        if(taskNodeArray[i].childNodes[1].checked) taskCheckCounter++;
+    }
+    return taskCheckCounter;
 }

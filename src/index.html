@@ -24,9 +24,9 @@
         <div class="row tasks">
             <div class="col-md-offset-2 col-md-5 col-md-container">
                 <div class="tasks-container">
-                    <ul class="nav nav-tabs">
-                        <li class="pull-right"><a data-toggle="tab" href="#task-complete">Завершенные</a></li>
-                        <li class="active pull-right"><a data-toggle="tab" href="#task-nocomplete">Незавершенные</a></li>
+                    <ul class="nav nav-tabs tasks-nav-tabs">
+                        <li class="pull-right tasks-complete-tab"><a data-toggle="tab" href="#task-complete">Завершенные</a></li>
+                        <li class="active pull-right tasks-nocomplete-tab"><a data-toggle="tab" href="#task-nocomplete">Незавершенные</a></li>
                     </ul>
                     <div class="tab-content">
                         <div id="task-nocomplete" class="tab-pane fade in active">
@@ -76,14 +76,14 @@
                 <div class="tasks-container tasks-container-description">
                     <ul class="nav nav-tabs nav-tabs-description">
                         <li class="list-item-init">Подзадачи</li>
-                        <li class="pull-right list-item-description"><a data-toggle="tab" href="#subtask-complete">Завершенные</a></li>
+                        <li class="pull-right list-item-description"><a data-toggle="tab" href="#subplete">Завершенные</a></li>
                         <li class="active pull-right list-item-description"><a data-toggle="tab" href="#subtask-nocomplete">Незавершенные</a></li>
                     </ul>
                     <div class="tab-content">
                         <div id="subtask-nocomplete" class="tab-pane fade in active">
-                            <div class="tasks-not-completed">
+                            <div class="subtasks-not-completed">
                                 <form class="form-add-task form-add-subtask">
-                                    <input type="text" class="form-control input-add-task input-add-subtask" placeholder="Добавить задачу...">
+                                    <input type="text" class="form-control input-add-task input-add-subtask" placeholder="Добавить подзадачу...">
                                     <div class="text-right">
                                         <button class="btn-add-task btn-add-subtask">Добавить задачу</button>
                                     </div>
@@ -91,7 +91,7 @@
                             </div>
                         </div>
                         <div id="subtask-complete" class="tab-pane fade">
-                            <div class="tasks-completed">
+                            <div class="subtask-completed">
                                 <p>Hello</p>
                             </div>
                         </div>
