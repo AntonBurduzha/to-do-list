@@ -10,6 +10,8 @@ function Task(params) {
     this.taskCheck = params.taskCheck || null;
     this.taskText = params.taskText || null;
     this.specificText = params.specificText || '';
+    this.taskTags = params.taskTags  || [];
+    this.taskTagText = params.taskTagText || [];
     this.specificDate = params.specificDate || null;
     this.taskDate = params.taskDate || null;
     this.taskCompleted = params.taskCompleted || false;
@@ -19,6 +21,7 @@ function Task(params) {
             name: $('.task-description-text'),
             completed: $('.task-description-state'),
             priority: $('.task-description-priority'),
+            tags: $('.task-description-tags'),
             date: $('.task-description-date')
         }
 }
@@ -67,6 +70,12 @@ function createEventListeners() {
     var tasksNavTab = $('.tasks-nav-tabs');
     var tasksCompleteTab = $('.tasks-complete-tab');
     var tasksNoCompleteTab = $('.tasks-nocomplete-tab');
+
+    // add tags
+    var tagMenuItems = document.querySelectorAll('.list-item-tag');
+    for(var i = 0; i < tagMenuItems.length; i++){
+        tagMenuItems[i].addEventListener('click', addTaskTags);
+    }
 
     addTaskBtn.addEventListener('click', addTask);
     addSubtaskBtn.addEventListener('click', addSubTask);
@@ -181,6 +190,35 @@ function createEventListeners() {
 
         event.preventDefault();
     }
+
+    function addTaskTags(event) {
+        var taskNotCompletedNode = document.querySelectorAll('.new-task');
+        var taskCompletedNode = document.querySelectorAll('.task-terminated');
+        var subtaskNotCompletedNode = document.querySelectorAll('.new-subtask');
+        var taskNotCompletedArray = currentTasks('notcompleted');
+        var taskCheckCounter = taskCheckedCounter();
+        var onlyNotCompletedTasksNode = taskNotCompletedNode.length - subtaskNotCompletedNode.length - taskCompletedNode.length;
+        var currentTagText = event.target.textContent;
+        for(var i = 0; i < onlyNotCompletedTasksNode; i++){
+            var tagCounter = taskNotCompletedNode[i].getElementsByTagName('span').length;
+            var tagTextCollection = taskNotCompletedNode[i].getElementsByTagName('span');
+            for(var j = 0; j < tagTextCollection.length; j++){
+                if(tagTextCollection[j].textContent == currentTagText){
+                    return false;
+                }
+            }
+            if(taskNotCompletedNode[i].childNodes[1].checked && taskCheckCounter == 1 && tagCounter < 3){
+                var taskTag = document.createElement('span');
+                taskTag.classList.add('task-tag');
+                taskTag.textContent = currentTagText;
+                taskNotCompletedNode[i].insertBefore(taskTag, taskNotCompletedNode[i].childNodes[3]);
+                taskNotCompletedArray[i].taskTags.push(taskTag);
+                taskNotCompletedArray[i].taskTagText.push(currentTagText);
+                localStorage.setItem('notcompleted', JSON.stringify(taskNotCompletedArray));
+
+            }
+        }
+    }
 }
 
 function createTask(task) {
@@ -210,6 +248,14 @@ function createTask(task) {
     task.newTask.appendChild(task.taskPriority);
     task.newTask.appendChild(task.taskCheck);
     task.newTask.appendChild(task.taskText);
+
+    for(var i = 0; i < task.taskTags.length; i++){
+        task.taskTags[i] = document.createElement('span');
+        task.taskTags[i].classList.add('task-tag');
+        task.taskTags[i].textContent = task.taskTagText[i];
+        task.newTask.appendChild(task.taskTags[i]);
+    }
+
     task.newTask.appendChild(task.taskDate);
 
     applyShowDescription(task);
@@ -218,6 +264,7 @@ function createTask(task) {
         var statusNotCompleted = 'Статус: незавершен';
         var priorityHigh = 'Приоритет: высокий';
         var priorityNormal = 'Приоритет: нормальный';
+        var tag = 'Тэги: ';
         var date = 'Дата выполнения:';
 
         task.newTask.addEventListener('click', function() {
@@ -253,6 +300,10 @@ function createTask(task) {
                     task.taskDescription.priority.textContent = priorityHigh;
                     task.taskDescription.icon.classList.add('task-priority-red');
                 }
+
+                var tagsDescriptionText = task.taskTagText.join(' ');
+                task.taskDescription.tags.textContent = tag + tagsDescriptionText;
+
                 var descriptionDate = Date.parse(task.specificDate);
                 task.taskDescription.date.textContent = date + (new Date (descriptionDate).toLocaleDateString('ru'));
                 showSubtasks(task);
@@ -270,6 +321,7 @@ function createTaskDescription(taskDescription) {
     taskDescription.name = $('.task-description-text');
     taskDescription.completed = $('.task-description-state');
     taskDescription.priority = $('.task-description-priority');
+    taskDescription.tags = $('.task-description-tags');
     taskDescription.date = $('.task-description-date');
     return taskDescription;
 }

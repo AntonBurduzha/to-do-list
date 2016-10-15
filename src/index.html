@@ -41,9 +41,17 @@
                                 <button class="btn-task-control btn-calendar">
                                     <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
                                 </button>
-                                <button class="btn-task-control btn-tags">
-                                    <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
-                                </button>
+                                <div class="dropdown dropdown-tags">
+                                    <button class="btn-task-control btn-tags dropdown-toggle" data-toggle="dropdown">
+                                        <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="list-item-tag">ежедневно</a></li>
+                                        <li><a class="list-item-tag">работа</a></li>
+                                        <li><a class="list-item-tag">срочно</a></li>
+                                        <li><a class="list-item-tag">учеба</a></li>
+                                    </ul>
+                                </div>
                                 <button class="btn-task-control btn-delete">
                                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                 </button>
