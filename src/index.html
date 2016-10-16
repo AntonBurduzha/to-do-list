@@ -35,9 +35,17 @@
                                     <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                                     <a data-toggle="tooltip" data-placement="bottom" title="Завершить"></a>
                                 </button>
-                                <button class="btn-task-control btn-priority">
-                                    <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
-                                </button>
+                                <div class="dropdown dropdown-priority">
+                                    <button class="btn-task-control btn-priority dropdown-toggle" data-toggle="dropdown">
+                                        <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li class="dropdown-header">Приоритет:</li>
+                                        <li class="divider"></li>
+                                        <li><a class="list-item-priority">Высокий</a></li>
+                                        <li><a class="list-item-priority">Нормальный</a></li>
+                                    </ul>
+                                </div>
                                 <button class="btn-task-control btn-calendar">
                                     <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
                                 </button>
@@ -46,13 +54,15 @@
                                         <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
                                     </button>
                                     <ul class="dropdown-menu">
+                                        <li class="dropdown-header">Тэги:</li>
+                                        <li class="divider"></li>
                                         <li><a class="list-item-tag">ежедневно</a></li>
                                         <li><a class="list-item-tag">работа</a></li>
                                         <li><a class="list-item-tag">срочно</a></li>
                                         <li><a class="list-item-tag">учеба</a></li>
                                     </ul>
                                 </div>
-                                <button class="btn-task-control btn-delete">
+                                <button class="btn-task-control btn-remove">
                                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                 </button>
                                 <form class="form-add-task">

@@ -46,13 +46,11 @@ function createEventListeners() {
     var tasksContainer = $('.tasks-container');
     mainWindow.style.height = document.documentElement.clientHeight - searchPanel.offsetHeight + 'px';
     tasksContainer.style.height = document.documentElement.clientHeight - searchPanel.offsetHeight - tasksBody + 'px';
-
     //add task/subtask
     var addTaskInput = $('.input-add-task');
     var addTaskBtn = $('.btn-add-task');
     var addSubtaskInput = $('.input-add-subtask');
     var addSubtaskBtn = $('.btn-add-subtask');
-
     //task searching
     var inputSearch = $('.input-search-task');
     var btnSearch = $('.btn-search');
@@ -61,7 +59,6 @@ function createEventListeners() {
     searchFailMsg.textContent = 'Ничего не найдено';
     searchFailMsg.classList.add('text-search-fail');
     notcompledTaskContainer.appendChild(searchFailMsg);
-
     //completed task
     var btnTaskComplete = $('.btn-complete');
     //var terminatedTasks = document.querySelectorAll('.task-terminated');
@@ -70,11 +67,17 @@ function createEventListeners() {
     var tasksNavTab = $('.tasks-nav-tabs');
     var tasksCompleteTab = $('.tasks-complete-tab');
     var tasksNoCompleteTab = $('.tasks-nocomplete-tab');
-
     // add tags
     var tagMenuItems = document.querySelectorAll('.list-item-tag');
     for(var i = 0; i < tagMenuItems.length; i++){
         tagMenuItems[i].addEventListener('click', addTaskTags);
+    }
+    //remove task
+    var btnRemove = $('.btn-remove');
+    //set task priority
+    var priorityMenuItems = document.querySelectorAll('.list-item-priority');
+    for(var i = 0; i < priorityMenuItems.length; i++){
+        priorityMenuItems[i].addEventListener('click', addTaskPriority);
     }
 
     addTaskBtn.addEventListener('click', addTask);
@@ -82,6 +85,7 @@ function createEventListeners() {
     btnTaskComplete.addEventListener('click', completeTask);
     tasksNavTab.addEventListener('click', clearTaskInfo);
     btnSearch.addEventListener('click', searchCurrentTasks);
+    btnRemove.addEventListener('click', removeTask);
 
     function searchCurrentTasks(event) {
         var taskNodeArray = document.querySelectorAll('.new-task');
@@ -176,6 +180,7 @@ function createEventListeners() {
                 newCompletedTask.childNodes[1].checked = false;//completed task unchecked
                 newCompletedTask.childNodes[2].classList.remove('task-text-checked'); //and not bold text
                 taskCompletedContainer.appendChild(newCompletedTask);//add new task node to completed tab
+                taskNotCompletedArray[i].taskCompleted = true;
                 taskCompletedArray.push(taskNotCompletedArray[i]);
                 localStorage.setItem('completed', JSON.stringify(taskCompletedArray)); //add completed task to ls
 
@@ -218,6 +223,28 @@ function createEventListeners() {
 
             }
         }
+    }
+    
+    function removeTask() {
+        var taskNotCompletedNode = document.querySelectorAll('.new-task');
+        var taskCompletedNode = document.querySelectorAll('.task-terminated');
+        var subtaskNotCompletedNode = document.querySelectorAll('.new-subtask');
+        var onlyNotCompletedTasksNode = taskNotCompletedNode.length - subtaskNotCompletedNode.length - taskCompletedNode.length;
+
+        var taskNotCompletedArray = currentTasks('notcompleted');
+        var taskCheckCounter = taskCheckedCounter();
+
+        for(var i = 0; i < onlyNotCompletedTasksNode; i++){
+            if(taskNotCompletedNode[i].childNodes[1].checked && taskCheckCounter == 1){
+                taskNotCompletedNode[i].parentNode.removeChild(taskNotCompletedNode[i]);
+                taskNotCompletedArray.splice(i, 1);
+                localStorage.setItem('notcompleted', JSON.stringify(taskNotCompletedArray));
+            }
+        }
+    }
+
+    function setTaskPriority(event) {
+
     }
 }
 

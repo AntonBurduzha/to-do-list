@@ -12,11 +12,6 @@
   height: 30px;
   padding: 5px;
   width: 60%;
-
-  &::-webkit-input-placeholder {color: $white;}
-  &::-moz-placeholder          {color: $white;}
-  &:-moz-placeholder           {color: $white;}
-  &:-ms-input-placeholder      {color: $white;}
 }
 
 .btn-search {

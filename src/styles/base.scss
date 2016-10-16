@@ -51,4 +51,10 @@
     background-color: $task-color;
   }
 }
+
+.input-search-task {
+  &::-webkit-input-placeholder {
+    color: $white;
+  }
+}
 //Bootstrap govno
