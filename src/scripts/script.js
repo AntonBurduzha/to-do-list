@@ -77,7 +77,7 @@ function createEventListeners() {
     //set task priority
     var priorityMenuItems = document.querySelectorAll('.list-item-priority');
     for(var i = 0; i < priorityMenuItems.length; i++){
-        priorityMenuItems[i].addEventListener('click', addTaskPriority);
+        priorityMenuItems[i].addEventListener('click', setTaskPriority);
     }
 
     addTaskBtn.addEventListener('click', addTask);
@@ -220,9 +220,9 @@ function createEventListeners() {
                 taskNotCompletedArray[i].taskTags.push(taskTag);
                 taskNotCompletedArray[i].taskTagText.push(currentTagText);
                 localStorage.setItem('notcompleted', JSON.stringify(taskNotCompletedArray));
-
             }
         }
+        location.href = location.href;
     }
     
     function removeTask() {
@@ -244,7 +244,34 @@ function createEventListeners() {
     }
 
     function setTaskPriority(event) {
+        var taskNotCompletedNode = document.querySelectorAll('.new-task');
+        var taskCompletedNode = document.querySelectorAll('.task-terminated');
+        var subtaskNotCompletedNode = document.querySelectorAll('.new-subtask');
+        var taskDescriptionNode = $('.task-description-priority');
+        var taskDescriptionPriority = 'Приоритет: ';
 
+        var taskNotCompletedArray = currentTasks('notcompleted');
+        var taskCheckCounter = taskCheckedCounter();
+        var onlyNotCompletedTasksNode = taskNotCompletedNode.length - subtaskNotCompletedNode.length - taskCompletedNode.length;
+        var currentPriorityText = event.target.textContent;
+        for(var i = 0; i < onlyNotCompletedTasksNode; i++){
+            if(taskNotCompletedNode[i].childNodes[1].checked && taskCheckCounter == 1){
+                if(currentPriorityText === 'Высокий'){
+                    taskNotCompletedNode[i].childNodes[0].classList.remove('task-priority-grey');
+                    taskNotCompletedNode[i].childNodes[0].classList.add('task-priority-red');
+                    taskNotCompletedArray[i].specificPriority = 'high';
+                    taskDescriptionNode.textContent = taskDescriptionPriority + 'высокий';
+                }
+                else if(currentPriorityText === 'Нормальный'){
+                    taskNotCompletedNode[i].childNodes[0].classList.remove('task-priority-red');
+                    taskNotCompletedNode[i].childNodes[0].classList.add('task-priority-grey');
+                    taskNotCompletedArray[i].specificPriority = 'normal';
+                    taskDescriptionNode.textContent = taskDescriptionPriority + 'нормальный';
+                }
+                localStorage.setItem('notcompleted', JSON.stringify(taskNotCompletedArray));
+            }
+        }
+        location.href = location.href;
     }
 }
 
@@ -256,7 +283,12 @@ function createTask(task) {
     addTaskForm.parentNode.appendChild(task.newTask);
 
     task.taskPriority = document.createElement('div');
-    task.taskPriority.classList.add('task-priority-grey');
+    if(task.specificPriority == 'normal'){
+        task.taskPriority.classList.add('task-priority-grey');
+    }
+    else{
+        task.taskPriority.classList.add('task-priority-red');
+    }
 
     task.taskCheck = document.createElement('input');
     task.taskCheck.setAttribute('type', 'checkbox');
@@ -292,7 +324,7 @@ function createTask(task) {
         var priorityHigh = 'Приоритет: высокий';
         var priorityNormal = 'Приоритет: нормальный';
         var tag = 'Тэги: ';
-        var date = 'Дата выполнения:';
+        var date = 'Срок: ';
 
         task.newTask.addEventListener('click', function() {
             var taskNodeArray = document.querySelectorAll('.new-task');
@@ -434,6 +466,7 @@ function clearTaskDescription(taskDescription) {
             task.taskDescription[elements].textContent = '';
         }
         task.taskDescription.icon.classList.remove('task-priority-grey');
+        task.taskDescription.icon.classList.remove('task-priority-red');
     }
 
 }
