@@ -5,6 +5,7 @@ var postcss = require('gulp-postcss');
 var autoprefixer = require('autoprefixer');
 var browserSync = require('browser-sync');
 var bsReload = require('browser-sync').reload;
+var eslint = require('gulp-eslint');
 
 gulp.task('browser-sync', function (){
     browserSync.init({
@@ -73,4 +74,11 @@ gulp.task('vendor', function () {
         .pipe(gulp.dest('dist/fonts'));
 });
 
-gulp.task('build', ['html', 'sass', 'script' ,'vendor', 'images', 'autoprefixer']);
+gulp.task('js-lint', function () {
+    return gulp.src(['src/scripts/**/*.js'])
+        .pipe(eslint())
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError());
+});
+
+gulp.task('build', ['html', 'sass', 'script' , 'js-lint', 'vendor', 'images', 'autoprefixer']);

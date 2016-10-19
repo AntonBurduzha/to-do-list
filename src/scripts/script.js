@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 //localStorage.clear();
 
@@ -23,7 +23,7 @@ function Task(params) {
             priority: $('.task-description-priority'),
             tags: $('.task-description-tags'),
             date: $('.task-description-date')
-        }
+        };
 }
 
 function Subtask(params){
@@ -75,7 +75,7 @@ function createEventListeners() {
     var btnRemove = $('.btn-remove');
 
     var priorityMenuItems = document.querySelectorAll('.list-item-priority');
-    for(var i = 0; i < priorityMenuItems.length; i++){
+    for(i = 0; i < priorityMenuItems.length; i++){
         priorityMenuItems[i].addEventListener('click', setTaskPriority);
     }
 
@@ -98,7 +98,7 @@ function createEventListeners() {
         searchFailMsg.style.display = 'none';
 
         var taskCurrentNodeLength = taskNodeArray.length - subtaskNodeArray.length - taskCompletedNodeArrray.length;
-        for(var i = 0; i < taskNodeArray.length; i++){
+        for(i = 0; i < taskNodeArray.length; i++){
             taskNodeArray[i].style.display = 'none';
             if(inputSearch.value.length > 0 && taskNodeArray[i].childNodes[2].textContent.indexOf(inputSearch.value) + 1){
                 taskNodeArray[i].style.display = 'block';
@@ -326,12 +326,13 @@ function createTask(task) {
 
     task.taskDate = document.createElement('p');
     task.taskDate.classList.add('task-date');
+    var today;
     if(task.specificDate !== null){
-        var today = new Date(task.specificDate);
+        today = new Date(task.specificDate);
         task.specificDate = today;
     }
     else{
-        var today = new Date();
+        today = new Date();
         task.specificDate = today;
     }
     task.taskDate.textContent = task.specificDate.toLocaleDateString('ru');
@@ -371,7 +372,7 @@ function createTask(task) {
             if(!(taskCheckCounter > 1)){
                 task.newTask.classList.add('task-checked');
                 task.newTask.childNodes[2].classList.add('task-text-checked');
-                for(var i = 0; i < taskNodeArray.length; i++){
+                for(i = 0; i < taskNodeArray.length; i++){
                     if(!task.newTask.classList.contains('.task-checked')){
                         for(var j = 0; j < subtaskNodeArray.length; j++){
                             subtaskNodeArray[j].remove();
@@ -439,23 +440,24 @@ function createSubtask(subtask) {
 function showTasks() {
     var taskCompletedContainer = $('.tasks-completed');
     var taskNotCompletedContainer = $('.tasks-not-completed');
-
+    var taskArray;
+    var task;
     if (localStorage.length > 0){
         for(var i = 0; i < localStorage.length; i++){
             var key = localStorage.key(i);
             if(key == 'notcompleted'){
-                var taskArray = currentTasks(key);
+                taskArray = currentTasks(key);
                 for(var j = 0; j < taskArray.length; j++){
                     if(taskArray[j].taskCompleted == false){
-                        var task = new Task(taskArray[j]);
+                        task = new Task(taskArray[j]);
                         task = createTask(task);
                     }
                 }
             }
             else if(key == 'completed'){
-                var taskArray = currentTasks(key);
+                taskArray = currentTasks(key);
                 for(var k = 0; k < taskArray.length; k++){
-                    var task = new Task(taskArray[k]);
+                    task = new Task(taskArray[k]);
                     task = createTask(task);
                     task.newTask.style.display = 'none';
                     var completedTaskBody = task.newTask.cloneNode(true);
@@ -472,7 +474,6 @@ function showTasks() {
 
 function showSubtasks(event) {
     var taskArray = currentTasks('notcompleted');
-    var taskArra = currentTasks('completed');
     var taskNodeArray = document.querySelectorAll('.new-task');
     for(var i = 0; i < taskNodeArray.length; i++){
         if(localStorage.length > 0 && event.newTask == taskNodeArray[i] && !taskNodeArray[i].classList.contains('task-terminated')){
