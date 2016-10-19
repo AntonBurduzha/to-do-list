@@ -26,17 +26,6 @@
   width: 3px;
 }
 
-.task-checkbox[type='checkbox'] {
-  color: $white;
-  display: inline-block;
-  margin: 0;
-  vertical-align: middle;
-
-  &:focus {
-    outline: 0;
-  }
-}
-
 .task-text {
   display: inline-block;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;

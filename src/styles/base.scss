@@ -57,4 +57,15 @@
     color: $white;
   }
 }
+
+input[type=checkbox] {
+  color: $white;
+  display: inline-block;
+  margin: 0;
+  vertical-align: middle;
+
+  &:focus {
+    outline: 0;
+  }
+}
 //Bootstrap govno
