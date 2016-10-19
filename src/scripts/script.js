@@ -39,19 +39,18 @@ showTasks();
 createEventListeners();
 
 function createEventListeners() {
-    //application clien heigth
     var mainWindow = $('.main');
     var searchPanel = $('.search');
     var tasksBody = parseInt(window.getComputedStyle($('.tasks'), null).getPropertyValue('padding-top'));
     var tasksContainer = $('.tasks-container');
     mainWindow.style.height = document.documentElement.clientHeight - searchPanel.offsetHeight + 'px';
     tasksContainer.style.height = document.documentElement.clientHeight - searchPanel.offsetHeight - tasksBody + 'px';
-    //add task/subtask
+
     var addTaskInput = $('.input-add-task');
     var addTaskBtn = $('.btn-add-task');
     var addSubtaskInput = $('.input-add-subtask');
     var addSubtaskBtn = $('.btn-add-subtask');
-    //task searching
+
     var inputSearch = $('.input-search-task');
     var btnSearch = $('.btn-search');
     var notcompledTaskContainer = $('.tasks-not-completed');
@@ -59,28 +58,28 @@ function createEventListeners() {
     searchFailMsg.textContent = 'Ничего не найдено';
     searchFailMsg.classList.add('text-search-fail');
     notcompledTaskContainer.appendChild(searchFailMsg);
-    //completed task
+
     var btnTaskComplete = $('.btn-complete');
     //var terminatedTasks = document.querySelectorAll('.task-terminated');
 
-    //click on completed/not completed tabs
+
     var tasksNavTab = $('.tasks-nav-tabs');
     var tasksCompleteTab = $('.tasks-complete-tab');
     var tasksNoCompleteTab = $('.tasks-nocomplete-tab');
-    // add tags
+
     var tagMenuItems = document.querySelectorAll('.list-item-tag');
     for(var i = 0; i < tagMenuItems.length; i++){
         tagMenuItems[i].addEventListener('click', addTaskTags);
     }
-    //remove task
+
     var btnRemove = $('.btn-remove');
-    //set task priority
+
     var priorityMenuItems = document.querySelectorAll('.list-item-priority');
     for(var i = 0; i < priorityMenuItems.length; i++){
         priorityMenuItems[i].addEventListener('click', setTaskPriority);
     }
 
-    //set task date
+
     var btnSetTaskDate = $('.btn-add-date');
     var inputSetTaskDate = $('.input-add-date');
 
@@ -134,7 +133,7 @@ function createEventListeners() {
 
     function addTask(event) {
         if(addTaskInput.value.length > 0){
-            var task = new Task(); //блок создающий задачу
+            var task = new Task();
             task.specificText = addTaskInput.value;
             task = createTask(task);
             addTaskInput.value = '';
@@ -172,29 +171,29 @@ function createEventListeners() {
 
         var taskNotCompletedArray = currentTasks('notcompleted');
         var taskCompletedArray = currentTasks('completed');
-        taskCompletedArray === null ? taskCompletedArray = [] : taskCompletedArray = taskCompletedArray; //if null => []
+        if(taskCompletedArray === null) taskCompletedArray = [];
         var taskCheckCounter = taskCheckedCounter();
         var newCompletedTask;
         for(var i = 0; i < taskNotCompletedNodeArray.length - subtaskNotCompletedNodeArray.length; i++){
             if(taskNotCompletedNodeArray[i].childNodes[1].checked && taskCheckCounter == 1){
-                taskNotCompletedNodeArray[i].style.display = 'none';//hide task
-                newCompletedTask = taskNotCompletedNodeArray[i].cloneNode(true);//clone in new task
-                taskNotCompletedContainer.removeChild(taskNotCompletedNodeArray[i]);//remove task node
-                newCompletedTask.style.display = 'block';//show new task node
+                taskNotCompletedNodeArray[i].style.display = 'none';
+                newCompletedTask = taskNotCompletedNodeArray[i].cloneNode(true);
+                taskNotCompletedContainer.removeChild(taskNotCompletedNodeArray[i]);
+                newCompletedTask.style.display = 'block';
                 newCompletedTask.classList.add('task-terminated');
-                newCompletedTask.childNodes[1].checked = false;//completed task unchecked
-                newCompletedTask.childNodes[2].classList.remove('task-text-checked'); //and not bold text
-                taskCompletedContainer.appendChild(newCompletedTask);//add new task node to completed tab
+                newCompletedTask.childNodes[1].checked = false;
+                newCompletedTask.childNodes[2].classList.remove('task-text-checked');
+                taskCompletedContainer.appendChild(newCompletedTask);
                 taskNotCompletedArray[i].taskCompleted = true;
                 taskCompletedArray.push(taskNotCompletedArray[i]);
-                localStorage.setItem('completed', JSON.stringify(taskCompletedArray)); //add completed task to ls
+                localStorage.setItem('completed', JSON.stringify(taskCompletedArray));
 
-                taskNotCompletedArray.splice(i, 1);//remove from not completed
-                localStorage.setItem('notcompleted', JSON.stringify(taskNotCompletedArray));//rewrite
+                taskNotCompletedArray.splice(i, 1);
+                localStorage.setItem('notcompleted', JSON.stringify(taskNotCompletedArray));
                 for(var j = 0; j < subtaskNotCompletedNodeArray.length; j++){
-                    subtaskNotCompletedContainer.removeChild(subtaskNotCompletedNodeArray[j]);//del all subtask nodes of current task
+                    subtaskNotCompletedContainer.removeChild(subtaskNotCompletedNodeArray[j]);
                 }
-                clearTaskDescription();//<= name =)
+                clearTaskDescription();
             }
         }
 
@@ -418,7 +417,7 @@ function createTaskDescription(taskDescription) {
     return taskDescription;
 }
 
-function createSubtask(subtask) { //описывает обьект подздачи
+function createSubtask(subtask) {
     var addSubtaskForm = $('.form-add-subtask');
     subtask.newSubtask = document.createElement('div');
     subtask.newSubtask.classList.add('new-task');
@@ -437,7 +436,7 @@ function createSubtask(subtask) { //описывает обьект подзда
     return subtask;
 }
 
-function showTasks() { //загружает обьеты tasks из locale storage
+function showTasks() {
     var taskCompletedContainer = $('.tasks-completed');
     var taskNotCompletedContainer = $('.tasks-not-completed');
 
@@ -485,18 +484,21 @@ function showSubtasks(event) {
     }
 }
 
-
 function clearTaskDescription(taskDescription) {
     if(arguments.length == 1){
         for(var elements in taskDescription){
-            taskDescription[elements].textContent = '';
+            if(taskDescription.hasOwnProperty(elements)){
+                taskDescription[elements].textContent = '';
+            }
         }
         return taskDescription;
     }
     else{
         var task = new Task();
-        for(var elements in task.taskDescription){
-            task.taskDescription[elements].textContent = '';
+        for(var element in task.taskDescription){
+            if(task.taskDescription.hasOwnProperty(element)){
+                task.taskDescription[element].textContent = '';
+            }
         }
         task.taskDescription.icon.classList.remove('task-priority-grey');
         task.taskDescription.icon.classList.remove('task-priority-red');
@@ -511,7 +513,6 @@ function clearSubtaskDescription() {
         subtasksNotCompleteContainer.removeChild(allNodeSubtasks[i]);
     }
 }
-
 
 function currentTasks(type) {
     return localStorage.length > 0 ? JSON.parse(localStorage.getItem(type)) : [];
