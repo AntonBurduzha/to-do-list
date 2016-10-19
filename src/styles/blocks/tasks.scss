@@ -52,10 +52,35 @@
   }
 }
 
-.dropdown-tags {
+.dropdown-control {
   display: inline-block;
 }
 
-.dropdown-priority {
-  display: inline-block;
+.input-add-date {
+  border: 1px solid $grey;
+  border-radius: 1px;
+  display: block;
+  margin: auto;
+  width: 98%;
 }
+
+.btn-add-date {
+  background-color: $button-color;
+  border: 1px solid $button-hover;
+  border-radius: 1px;
+  color: $white;
+  display: block;
+  font-size: 12px;
+  font-weight: bold;
+  margin: auto;
+  margin-top: 5px;
+  padding: 3px 6px;
+  width: 98%;
+
+  &:hover,
+  &:focus {
+    background-color: $button-hover;
+  }
+
+}
+

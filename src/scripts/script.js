@@ -80,12 +80,17 @@ function createEventListeners() {
         priorityMenuItems[i].addEventListener('click', setTaskPriority);
     }
 
+    //set task date
+    var btnSetTaskDate = $('.btn-add-date');
+    var inputSetTaskDate = $('.input-add-date');
+
     addTaskBtn.addEventListener('click', addTask);
     addSubtaskBtn.addEventListener('click', addSubTask);
     btnTaskComplete.addEventListener('click', completeTask);
     tasksNavTab.addEventListener('click', clearTaskInfo);
     btnSearch.addEventListener('click', searchCurrentTasks);
     btnRemove.addEventListener('click', removeTask);
+    btnSetTaskDate.addEventListener('click', setTaskDate);
 
     function searchCurrentTasks(event) {
         var taskNodeArray = document.querySelectorAll('.new-task');
@@ -222,7 +227,6 @@ function createEventListeners() {
                 localStorage.setItem('notcompleted', JSON.stringify(taskNotCompletedArray));
             }
         }
-        location.href = location.href;
     }
     
     function removeTask() {
@@ -271,7 +275,30 @@ function createEventListeners() {
                 localStorage.setItem('notcompleted', JSON.stringify(taskNotCompletedArray));
             }
         }
-        location.href = location.href;
+    }
+
+    function setTaskDate() {
+        var taskNotCompletedNode = document.querySelectorAll('.new-task');
+        var taskCompletedNode = document.querySelectorAll('.task-terminated');
+        var subtaskNotCompletedNode = document.querySelectorAll('.new-subtask');
+        var onlyNotCompletedTasksNode = taskNotCompletedNode.length - subtaskNotCompletedNode.length - taskCompletedNode.length;
+
+        var taskNotCompletedArray = currentTasks('notcompleted');
+        var taskCheckCounter = taskCheckedCounter();
+        var newUserDate = inputSetTaskDate.value;
+        var regexDate = /\d{2}\.\d{2}\.\d{4}/;
+        var trueDate = regexDate.test(newUserDate);
+
+        for(var i = 0; i < onlyNotCompletedTasksNode; i++){
+            if(taskNotCompletedNode[i].childNodes[1].checked && taskCheckCounter == 1 && newUserDate.length > 0 && trueDate){
+                var newDate = toDate(newUserDate);
+                newUserDate = newDate.toLocaleDateString('ru');
+                taskNotCompletedNode[i].lastChild.textContent = newUserDate;
+                taskNotCompletedArray[i].specificDate = newDate;
+                localStorage.setItem('notcompleted', JSON.stringify(taskNotCompletedArray));
+            }
+        }
+        inputSetTaskDate.value = '';
     }
 }
 
@@ -293,7 +320,6 @@ function createTask(task) {
     task.taskCheck = document.createElement('input');
     task.taskCheck.setAttribute('type', 'checkbox');
     task.taskCheck.classList.add('task-checkbox');
-    //task.taskCheck.addEventListener('click', checkTask);
 
     task.taskText = document.createElement('p');
     task.taskText.textContent = task.specificText;
@@ -301,8 +327,15 @@ function createTask(task) {
 
     task.taskDate = document.createElement('p');
     task.taskDate.classList.add('task-date');
-    var today = new Date();
-    task.specificDate = today;
+    if(task.specificDate !== null){
+        var today = new Date(task.specificDate);
+        task.specificDate = today;
+    }
+    else{
+        var today = new Date();
+        task.specificDate = today;
+    }
+    task.taskDate.textContent = task.specificDate.toLocaleDateString('ru');
 
     task.newTask.appendChild(task.taskPriority);
     task.newTask.appendChild(task.taskCheck);
@@ -496,4 +529,9 @@ function taskCheckedCounter() {
         if(taskNodeArray[i].childNodes[1].checked) taskCheckCounter++;
     }
     return taskCheckCounter;
+}
+
+function toDate(inputedDate) {
+    var dateArray = inputedDate.split('.');
+    return new Date(dateArray[2], dateArray[1] - 1, dateArray[0]);
 }

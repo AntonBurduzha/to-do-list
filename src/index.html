@@ -35,7 +35,7 @@
                                     <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                                     <a data-toggle="tooltip" data-placement="bottom" title="Завершить"></a>
                                 </button>
-                                <div class="dropdown dropdown-priority">
+                                <div class="dropdown dropdown-control">
                                     <button class="btn-task-control btn-priority dropdown-toggle" data-toggle="dropdown">
                                         <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
                                     </button>
@@ -46,10 +46,20 @@
                                         <li><a class="list-item-priority">Нормальный</a></li>
                                     </ul>
                                 </div>
-                                <button class="btn-task-control btn-calendar">
-                                    <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                                </button>
-                                <div class="dropdown dropdown-tags">
+                                <div class="dropdown dropdown-control">
+                                    <button class="btn-task-control btn-calendar dropdown-toggle" data-toggle="dropdown">
+                                        <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li class="dropdown-header">Введите дату: </li>
+                                        <li class="divider"></li>
+                                        <li>
+                                            <input type="text" class="input-add-date" placeholder="дд.мм.гггг">
+                                            <button class="btn-add-date">Подтвердить</button>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="dropdown dropdown-control">
                                     <button class="btn-task-control btn-tags dropdown-toggle" data-toggle="dropdown">
                                         <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
                                     </button>
