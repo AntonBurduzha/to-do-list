@@ -75,8 +75,8 @@ function createEventListeners() {
   var btnRemove = $('.btn-remove');
 
   var priorityMenuItems = document.querySelectorAll('.list-item-priority');
-  for (var i = 0; i < priorityMenuItems.length; i++) {
-    priorityMenuItems[i].addEventListener('click', setTaskPriority);
+  for (var j = 0; j < priorityMenuItems.length; j++) {
+    priorityMenuItems[j].addEventListener('click', setTaskPriority);
   }
 
 
@@ -108,8 +108,8 @@ function createEventListeners() {
       }
     }
     var displayTaskCounter = 0; //show search fail message
-    for (var i = 0; i < taskCurrentNodeLength; i++) {
-      var tasksBodyHidden = window.getComputedStyle(taskNodeArray[i], null).getPropertyValue('display');
+    for (var j = 0; j < taskCurrentNodeLength; j++) {
+      var tasksBodyHidden = window.getComputedStyle(taskNodeArray[j], null).getPropertyValue('display');
       tasksBodyHidden === 'none' ? displayTaskCounter++ : displayTaskCounter = 0;
     }
     if (displayTaskCounter === taskCurrentNodeLength) {
@@ -386,7 +386,7 @@ function createTask(task) {
       if (!(taskCheckCounter > 1)) {
         task.newTask.classList.add('task-checked');
         task.newTask.childNodes[2].classList.add('task-text-checked');
-        for (var i = 0; i < taskNodeArray.length; i++) {
+        for (var k = 0; k < taskNodeArray.length; k++) {
           if (!task.newTask.classList.contains('.task-checked')) {
             for (var j = 0; j < subtaskNodeArray.length; j++) {
               subtaskNodeArray[j].remove();
@@ -400,10 +400,12 @@ function createTask(task) {
 
         if (task.specificPriority === 'normal') {
           task.taskDescription.priority.textContent = priorityNormal;
+          task.taskDescription.icon.classList.remove('task-priority-red');
           task.taskDescription.icon.classList.add('task-priority-grey');
         }
         else {
           task.taskDescription.priority.textContent = priorityHigh;
+          task.taskDescription.icon.classList.remove('task-priority-grey');
           task.taskDescription.icon.classList.add('task-priority-red');
         }
 
