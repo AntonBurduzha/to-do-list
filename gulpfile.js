@@ -6,6 +6,15 @@ var autoprefixer = require('autoprefixer');
 var browserSync = require('browser-sync');
 var bsReload = require('browser-sync').reload;
 var eslint = require('gulp-eslint');
+var browserify = require('browserify');
+var source = require('vinyl-source-stream');
+
+gulp.task('browserify', function() {
+    return browserify('./src/scripts/script.js')
+      .bundle()
+      .pipe(source('bundle.js'))
+      .pipe(gulp.dest('./dist/js/'));
+});
 
 gulp.task('browser-sync', function (){
     browserSync.init({
@@ -81,4 +90,4 @@ gulp.task('js-lint', function () {
         .pipe(eslint.failAfterError());
 });
 
-gulp.task('build', ['html', 'sass', 'script' , 'js-lint', 'vendor', 'images', 'autoprefixer']);
+gulp.task('build', ['html', 'sass', 'script' , 'js-lint', 'vendor', 'images', 'autoprefixer', 'browserify']);

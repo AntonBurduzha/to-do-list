@@ -4,5 +4,9 @@
     "browser": true,
     "jquery": true
   },
-  "extends": "eslint:recommended"
+  "extends": "eslint:recommended",
+  "globals": {
+    "module": true,
+    "require": true
+  }
 }

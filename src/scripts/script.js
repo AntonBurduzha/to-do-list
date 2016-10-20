@@ -1,5 +1,6 @@
 'use strict';
 
+var $ = require('./task');
 // localStorage.clear();
 
 function Task(params) {
@@ -533,10 +534,6 @@ function clearSubtaskDescription() {
 
 function currentTasks(type) {
   return localStorage.length > 0 ? JSON.parse(localStorage.getItem(type)) : [];
-}
-
-function $(class_selector) {
-  return document.querySelector(class_selector);
 }
 
 function taskCheckedCounter() {
