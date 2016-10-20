@@ -75,7 +75,7 @@ function createEventListeners() {
   var btnRemove = $('.btn-remove');
 
   var priorityMenuItems = document.querySelectorAll('.list-item-priority');
-  for (i = 0; i < priorityMenuItems.length; i++) {
+  for (var i = 0; i < priorityMenuItems.length; i++) {
     priorityMenuItems[i].addEventListener('click', setTaskPriority);
   }
 
@@ -98,7 +98,7 @@ function createEventListeners() {
     searchFailMsg.style.display = 'none';
 
     var taskCurrentNodeLength = taskNodeArray.length - subtaskNodeArray.length - taskCompletedNodeArrray.length;
-    for (i = 0; i < taskNodeArray.length; i++) {
+    for (var i = 0; i < taskNodeArray.length; i++) {
       taskNodeArray[i].style.display = 'none';
       if (inputSearch.value.length > 0 && taskNodeArray[i].childNodes[2].textContent.indexOf(inputSearch.value) + 1) {
         taskNodeArray[i].style.display = 'block';
@@ -251,6 +251,7 @@ function createEventListeners() {
     var taskCompletedNode = document.querySelectorAll('.task-terminated');
     var subtaskNotCompletedNode = document.querySelectorAll('.new-subtask');
     var taskDescriptionNode = $('.task-description-priority');
+    var taskDescriptionColor = $('.task-description-color');
     var taskDescriptionPriority = 'Приоритет: ';
 
     var taskNotCompletedArray = currentTasks('notcompleted');
@@ -264,12 +265,16 @@ function createEventListeners() {
           taskNotCompletedNode[i].childNodes[0].classList.add('task-priority-red');
           taskNotCompletedArray[i].specificPriority = 'high';
           taskDescriptionNode.textContent = taskDescriptionPriority + 'высокий';
+          taskDescriptionColor.classList.remove('task-priority-grey');
+          taskDescriptionColor.classList.add('task-priority-red');
         }
         else if (currentPriorityText === 'Нормальный') {
           taskNotCompletedNode[i].childNodes[0].classList.remove('task-priority-red');
           taskNotCompletedNode[i].childNodes[0].classList.add('task-priority-grey');
           taskNotCompletedArray[i].specificPriority = 'normal';
           taskDescriptionNode.textContent = taskDescriptionPriority + 'нормальный';
+          taskDescriptionColor.classList.remove('task-priority-red');
+          taskDescriptionColor.classList.add('task-priority-grey');
         }
         localStorage.setItem('notcompleted', JSON.stringify(taskNotCompletedArray));
       }
@@ -285,8 +290,15 @@ function createEventListeners() {
     var taskNotCompletedArray = currentTasks('notcompleted');
     var taskCheckCounter = taskCheckedCounter();
     var newUserDate = inputSetTaskDate.value;
+    var trueDate;
     var regexDate = /(\d{2})-(\d{2})-(\d{4})/;
-    var trueDate = regexDate.test(newUserDate);
+    if(regexDate.test(newUserDate)){
+      trueDate = true;
+    }
+    else{
+      inputSetTaskDate.value = 'Неверный формат ввода';
+      return false;
+    }
 
     for (var i = 0; i < onlyNotCompletedTasksNode; i++) {
       if (taskNotCompletedNode[i].childNodes[1].checked && taskCheckCounter == 1 && newUserDate.length > 0 && trueDate) {
@@ -295,6 +307,8 @@ function createEventListeners() {
         taskNotCompletedNode[i].lastChild.textContent = newUserDate;
         taskNotCompletedArray[i].specificDate = newDate;
         localStorage.setItem('notcompleted', JSON.stringify(taskNotCompletedArray));
+        var taskDescriptionDate = $('.task-description-date');
+        taskDescriptionDate.textContent = 'Срок: ' + newUserDate;
       }
     }
     inputSetTaskDate.value = '';
@@ -372,7 +386,7 @@ function createTask(task) {
       if (!(taskCheckCounter > 1)) {
         task.newTask.classList.add('task-checked');
         task.newTask.childNodes[2].classList.add('task-text-checked');
-        for (i = 0; i < taskNodeArray.length; i++) {
+        for (var i = 0; i < taskNodeArray.length; i++) {
           if (!task.newTask.classList.contains('.task-checked')) {
             for (var j = 0; j < subtaskNodeArray.length; j++) {
               subtaskNodeArray[j].remove();
