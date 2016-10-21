@@ -1,8 +1,13 @@
-module.exports = function Subtask(params) {
-  params = params || {};
-  this.newSubtask = params.newSubtask || null;
-  this.subtaskPriority = params.subtaskPriority || null;
-  this.specificPriority = params.specificPriority || 'normal';
-  this.subtaskText = params.subtaskText || null;
-  this.specificText = params.specificText || '';
+var subtask = function (params) {
+  var Subtask = function (params) {
+    var param = params || {};
+    this.newSubtask = param.newSubtask || null;
+    this.subtaskPriority = param.subtaskPriority || null;
+    this.specificPriority = param.specificPriority || 'normal';
+    this.subtaskText = param.subtaskText || null;
+    this.specificText = param.specificText || '';
+  }
+  return new Subtask(params);
 };
+
+module.exports = subtask;
