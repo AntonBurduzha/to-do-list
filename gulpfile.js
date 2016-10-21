@@ -8,7 +8,6 @@ var bsReload = require('browser-sync').reload;
 var eslint = require('gulp-eslint');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
-var watchify = require('watchify');
 
 gulp.task('script', function() {
     return browserify('./src/scripts/script.js')
