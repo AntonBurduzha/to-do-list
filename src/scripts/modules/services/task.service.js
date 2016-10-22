@@ -1,5 +1,5 @@
 var Task = require('./../core/task');
-var taskCreator = require('./../factory/task-creator');
+var taskCreator = require('./../factory/task.creator');
 var common = require('./../common');
 var $ = require('./../common').$;
 

@@ -1,6 +1,6 @@
 var $ = require('./../common').$;
 var common = require('./../common');
-var subtaskManager = require('./../services/subtask-service');
+var subtaskManager = require('./../services/subtask.service');
 
 var taskCreator = {
   createTask: createTask

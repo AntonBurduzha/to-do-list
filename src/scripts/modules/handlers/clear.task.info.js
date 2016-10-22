@@ -1,6 +1,6 @@
 var $ = require('./../common').$;
-var taskManager = require('./../services/task-service');
-var subtaskManager = require('./../services/subtask-service');
+var taskManager = require('./../services/task.service');
+var subtaskManager = require('./../services/subtask.service');
 
 var clearTaskInfo = {
   createClearTaskInfoHandler: createClearTaskInfoHandler

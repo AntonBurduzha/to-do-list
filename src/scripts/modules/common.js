@@ -2,7 +2,8 @@ var common = {
   currentTasks: currentTasks,
   taskCheckedCounter: taskCheckedCounter,
   $: $,
-  setAppHeigth: setAppHeigth
+  setAppHeigth: setAppHeigth,
+  taskCompletedCheckedCounter: taskCompletedCheckedCounter
 };
 
 module.exports = common;
@@ -17,6 +18,17 @@ function taskCheckedCounter() {
   var subtaskNodeArray = document.querySelectorAll('.new-subtask');
   for (var i = 0; i < taskNodeArray.length - subtaskNodeArray.length; i++) {
     if (taskNodeArray[i].childNodes[1].checked) {
+      taskCheckCounter++;
+    }
+  }
+  return taskCheckCounter;
+}
+
+function taskCompletedCheckedCounter() {
+  var taskCheckCounter = 0;
+  var completedTaskNode = document.querySelectorAll('.task-terminated');
+  for (var i = 0; i < completedTaskNode.length; i++) {
+    if (completedTaskNode[i].childNodes[1].checked) {
       taskCheckCounter++;
     }
   }

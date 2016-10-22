@@ -1,7 +1,7 @@
 var common = require('./../common');
 var $ = require('./../common').$;
 var Subtask = require('./../core/subtask');
-var subtaskCreator = require('./../factory/subtask-creator');
+var subtaskCreator = require('./../factory/subtask.creator');
 
 var addSubtasks= {
   createAddSubtaskHandler: createAddSubtaskHandler
