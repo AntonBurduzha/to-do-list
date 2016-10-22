@@ -1,7 +1,8 @@
 var common = {
   currentTasks: currentTasks,
   taskCheckedCounter: taskCheckedCounter,
-  $: $
+  $: $,
+  setAppHeigth: setAppHeigth
 };
 
 module.exports = common;
@@ -24,4 +25,13 @@ function taskCheckedCounter() {
 
 function $(class_selector) {
   return document.querySelector(class_selector);
+}
+
+function setAppHeigth() {
+  var mainWindow = $('.main');
+  var searchPanel = $('.search');
+  var tasksBody = parseInt(window.getComputedStyle($('.tasks'), null).getPropertyValue('padding-top'));
+  var tasksContainer = $('.tasks-container');
+  mainWindow.style.height = document.documentElement.clientHeight - searchPanel.offsetHeight + 'px';
+  tasksContainer.style.height = document.documentElement.clientHeight - searchPanel.offsetHeight - tasksBody + 'px';
 }

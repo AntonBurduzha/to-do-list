@@ -1,33 +1,14 @@
-var common = require('./common');
-var $ = require('./common').$;
-var Subtask = require('./subtask');
+var common = require('./../common');
+var $ = require('./../common').$;
+var Subtask = require('./../core/subtask');
+var subtaskCreator = require('./../factory/subtask-creator');
 
 var subtaskManager = {
-  createSubtask: createSubtask,
   showSubtasks: showSubtasks,
   clearSubtaskDescription: clearSubtaskDescription
 };
 
 module.exports = subtaskManager;
-
-function createSubtask(subtask) {
-  var addSubtaskForm = $('.form-add-subtask');
-  subtask.newSubtask = document.createElement('div');
-  subtask.newSubtask.classList.add('new-task');
-  subtask.newSubtask.classList.add('new-subtask');
-  addSubtaskForm.parentNode.appendChild(subtask.newSubtask);
-
-  subtask.subtaskPriority = document.createElement('div');
-  subtask.subtaskPriority.classList.add('task-priority-grey');
-
-  subtask.subtaskText = document.createElement('p');
-  subtask.subtaskText.textContent = subtask.specificText;
-  subtask.subtaskText.classList.add('task-text');
-
-  subtask.newSubtask.appendChild(subtask.subtaskPriority);
-  subtask.newSubtask.appendChild(subtask.subtaskText);
-  return subtask;
-}
 
 function showSubtasks(event) {
   var taskArray = common.currentTasks('notcompleted');
@@ -36,7 +17,7 @@ function showSubtasks(event) {
     if (localStorage.length > 0 && event.newTask == taskNodeArray[i] && !taskNodeArray[i].classList.contains('task-terminated')) {
       for (var j = 0; j < taskArray[i].subtasks.length; j++) {
         var subtask = Subtask(taskArray[i].subtasks[j]);
-        subtask = createSubtask(subtask);
+        subtask = subtaskCreator.createSubtask(subtask);
       }
     }
   }

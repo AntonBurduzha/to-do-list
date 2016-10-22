@@ -1,4 +1,4 @@
-var $ = require('./common').$;
+var $ = require('./../common').$;
 
 var task = function (params) {
   var Task = function (params) {
