@@ -1,6 +1,6 @@
 var $ = require('./../common').$;
 var common = require('./../common');
-var taskManager = require('./../managers/task-manager');
+var taskManager = require('./../services/task-service');
 
 var completeTask = {
   createCompleteTaskHandler: createCompleteTaskHandler

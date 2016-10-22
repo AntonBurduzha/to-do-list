@@ -82,7 +82,7 @@ gulp.task('js-lint', function () {
 gulp.task('watch', ['browser-sync'], function () {
     gulp.watch('src/*.html', ['html', bsReload]);
     gulp.watch('src/**/*.scss', ['sass']);
-    gulp.watch('src/scripts/*.js', ['script', bsReload]);
+    gulp.watch('src/scripts/**/*.js', ['script', bsReload]);
 });
 
 

@@ -1,6 +1,6 @@
 var $ = require('./../common').$;
 var common = require('./../common');
-var subtaskManager = require('./../managers/subtask-manager');
+var subtaskManager = require('./../services/subtask-service');
 
 var taskCreator = {
   createTask: createTask
@@ -57,16 +57,17 @@ function createTask(task) {
 
   task.newTask.appendChild(task.taskDate);
 
-  applyShowDescription(task);
-  function applyShowDescription(task) {
-    var statusCompleted = 'Статус: завершен';
-    var statusNotCompleted = 'Статус: незавершен';
-    var priorityHigh = 'Приоритет: высокий';
-    var priorityNormal = 'Приоритет: нормальный';
-    var tag = 'Тэги: ';
-    var date = 'Срок: ';
+  (function applyShowDescription(task) {
+    task.newTask.addEventListener('click', showTaskDescription);
 
-    task.newTask.addEventListener('click', function () {
+    function showTaskDescription() {
+      var statusCompleted = 'Статус: завершен';
+      var statusNotCompleted = 'Статус: незавершен';
+      var priorityHigh = 'Приоритет: высокий';
+      var priorityNormal = 'Приоритет: нормальный';
+      var tag = 'Тэги: ';
+      var date = 'Срок: ';
+
       var taskNodeArray = document.querySelectorAll('.new-task');
       var subtaskNodeArray = document.querySelectorAll('.new-subtask');
       var taskCheckCounter = common.taskCheckedCounter();
@@ -108,10 +109,8 @@ function createTask(task) {
         task.taskDescription.date.textContent = date + (new Date(Date.parse(task.specificDate)).toLocaleDateString('ru'));
         subtaskManager.showSubtasks(task);
       }
-
-    });
-    return task;
-  }
+    }
+  })(task);
 
   return task;
 }

@@ -1,7 +1,7 @@
 'use strict';
 
 var common = require('./modules/common');
-var taskManager = require('./modules/managers/task-manager');
+var taskManager = require('./modules/services/task-service');
 var handlers = require('./modules/handler');
 
 // localStorage.clear();

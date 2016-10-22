@@ -2,7 +2,7 @@ var $ = require('./../common').$;
 var common = require('./../common');
 var Task = require('./../core/task');
 var taskCreator = require('./../factory/task-creator');
-var taskManager = require('./../managers/task-manager');
+var taskManager = require('./../services/task-service');
 
 var addTasks = {
   createAddTaskHandler: createAddTaskHandler

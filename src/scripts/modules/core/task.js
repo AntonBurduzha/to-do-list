@@ -40,4 +40,3 @@ var task = function (params) {
 };
 
 module.exports = task;
-//module.exports = Task;
