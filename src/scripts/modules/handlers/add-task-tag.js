@@ -17,18 +17,17 @@ function createAddTaskTagHandler() {
     var taskCompletedNode = document.querySelectorAll('.task-terminated');
     var subtaskNotCompletedNode = document.querySelectorAll('.new-subtask');
     var taskNotCompletedArray = common.currentTasks('notcompleted');
-    var taskCheckCounter = common.taskCheckedCounter();
     var onlyNotCompletedTasksNode = taskNotCompletedNode.length - subtaskNotCompletedNode.length - taskCompletedNode.length;
     var currentTagText = event.target.textContent;
     for (var i = 0; i < onlyNotCompletedTasksNode; i++) {
-      var tagCounter = taskNotCompletedNode[i].getElementsByTagName('span').length;
       var tagTextCollection = taskNotCompletedNode[i].getElementsByTagName('span');
       for (var j = 0; j < tagTextCollection.length; j++) {
-        if (tagTextCollection[j].textContent === currentTagText && taskNotCompletedNode[i].childNodes[1].checked) {
+        if (tagTextCollection[j].textContent === currentTagText &&
+          (taskNotCompletedNode[i].childNodes[1].checked || taskNotCompletedNode[i].classList.contains('task-checked'))) {
           return false;
         }
       }
-      if (taskNotCompletedNode[i].childNodes[1].checked && taskCheckCounter == 1 && tagCounter < 3) {
+      if (taskNotCompletedNode[i].childNodes[1].checked || taskNotCompletedNode[i].classList.contains('task-checked')) {
         var taskTag = document.createElement('span');
         taskTag.classList.add('task-tag');
         taskTag.textContent = currentTagText;

@@ -5,7 +5,7 @@ var $ = require('./../common').$;
 
 var taskManager = {
   clearTaskDescription: clearTaskDescription,
-  showTasks: showTasks,
+  showTasks: showTasks
 };
 
 module.exports = taskManager;

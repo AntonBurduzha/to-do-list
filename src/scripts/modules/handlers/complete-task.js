@@ -23,10 +23,9 @@ function createCompleteTaskHandler() {
     var taskNotCompletedArray = common.currentTasks('notcompleted');
     var taskCompletedArray = common.currentTasks('completed');
     if (taskCompletedArray === null) taskCompletedArray = [];
-    var taskCheckCounter = common.taskCheckedCounter();
     var newCompletedTask;
     for (var i = 0; i < taskNotCompletedNodeArray.length - subtaskNotCompletedNodeArray.length; i++) {
-      if (taskNotCompletedNodeArray[i].childNodes[1].checked && taskCheckCounter == 1) {
+      if (taskNotCompletedNodeArray[i].childNodes[1].checked || taskNotCompletedNodeArray[i].classList.contains('task-checked')) {
         taskNotCompletedNodeArray[i].style.display = 'none';
         newCompletedTask = taskNotCompletedNodeArray[i].cloneNode(true);
         taskNotCompletedContainer.removeChild(taskNotCompletedNodeArray[i]);

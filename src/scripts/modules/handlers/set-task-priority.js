@@ -20,13 +20,11 @@ function createSetTaskPriorityHandler() {
     var taskDescriptionNode = $('.task-description-priority');
     var taskDescriptionColor = $('.task-description-color');
     var taskDescriptionPriority = 'Приоритет: ';
-
     var taskNotCompletedArray = common.currentTasks('notcompleted');
-    var taskCheckCounter = common.taskCheckedCounter();
     var onlyNotCompletedTasksNode = taskNotCompletedNode.length - subtaskNotCompletedNode.length - taskCompletedNode.length;
     var currentPriorityText = event.target.textContent;
     for (var i = 0; i < onlyNotCompletedTasksNode; i++) {
-      if (taskNotCompletedNode[i].childNodes[1].checked && taskCheckCounter == 1) {
+      if (taskNotCompletedNode[i].childNodes[1].checked || taskNotCompletedNode[i].classList.contains('task-checked')) {
         if (currentPriorityText === 'Высокий') {
           taskNotCompletedNode[i].childNodes[0].classList.remove('task-priority-grey');
           taskNotCompletedNode[i].childNodes[0].classList.add('task-priority-red');

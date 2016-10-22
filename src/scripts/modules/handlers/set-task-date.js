@@ -20,7 +20,6 @@ function createSetTaskDateHandler() {
     var onlyNotCompletedTasksNode = taskNotCompletedNode.length - subtaskNotCompletedNode.length - taskCompletedNode.length;
 
     var taskNotCompletedArray = common.currentTasks('notcompleted');
-    var taskCheckCounter = common.taskCheckedCounter();
     var newUserDate = inputSetTaskDate.value;
     var trueDate;
     var regexDate = /(\d{2})-(\d{2})-(\d{4})/;
@@ -31,10 +30,10 @@ function createSetTaskDateHandler() {
       inputSetTaskDate.value = 'Неверный формат ввода';
       return false;
     }
-
+    var newDate = new Date(newUserDate.replace(regexDate, "$2/$1/$3"));
     for (var i = 0; i < onlyNotCompletedTasksNode; i++) {
-      if (taskNotCompletedNode[i].childNodes[1].checked && taskCheckCounter == 1 && newUserDate.length > 0 && trueDate) {
-        var newDate = new Date(newUserDate.replace(regexDate, "$2/$1/$3"));
+      if ((taskNotCompletedNode[i].childNodes[1].checked || taskNotCompletedNode[i].classList.contains('task-checked'))
+        && newUserDate.length > 0 && trueDate) {
         newUserDate = newDate.toLocaleDateString('ru');
         taskNotCompletedNode[i].lastChild.textContent = newUserDate;
         taskNotCompletedArray[i].specificDate = newDate;

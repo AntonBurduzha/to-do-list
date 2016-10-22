@@ -1,5 +1,6 @@
 var $ = require('./../common').$;
 var common = require('./../common');
+var taskManager = require('./../services/task-service');
 
 var removeTask = {
   createRemoveTaskHandler: createRemoveTaskHandler
@@ -19,11 +20,11 @@ function createRemoveTaskHandler() {
     var onlyNotCompletedTasksNode = taskNotCompletedNode.length - subtaskNotCompletedNode.length - taskCompletedNode.length;
 
     var taskNotCompletedArray = common.currentTasks('notcompleted');
-    var taskCheckCounter = common.taskCheckedCounter();
 
     for (var i = 0; i < onlyNotCompletedTasksNode; i++) {
-      if (taskNotCompletedNode[i].childNodes[1].checked && taskCheckCounter == 1) {
+      if (taskNotCompletedNode[i].childNodes[1].checked || taskNotCompletedNode[i].classList.contains('task-checked')) {
         taskNotCompletedNode[i].parentNode.removeChild(taskNotCompletedNode[i]);
+        taskManager.clearTaskDescription();
         taskNotCompletedArray.splice(i, 1);
         localStorage.setItem('notcompleted', JSON.stringify(taskNotCompletedArray));
       }
