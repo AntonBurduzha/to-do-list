@@ -20,14 +20,16 @@ function createAddTaskTagHandler() {
     var onlyNotCompletedTasksNode = taskNotCompletedNode.length - subtaskNotCompletedNode.length - taskCompletedNode.length;
     var currentTagText = event.target.textContent;
     for (var i = 0; i < onlyNotCompletedTasksNode; i++) {
+      var tagNotContains = true;
       var tagTextCollection = taskNotCompletedNode[i].getElementsByTagName('span');
       for (var j = 0; j < tagTextCollection.length; j++) {
         if (tagTextCollection[j].textContent === currentTagText &&
           (taskNotCompletedNode[i].childNodes[1].checked || taskNotCompletedNode[i].classList.contains('task-checked'))) {
-          return false;
+          tagNotContains = false;
+          break;
         }
       }
-      if (taskNotCompletedNode[i].childNodes[1].checked || taskNotCompletedNode[i].classList.contains('task-checked')) {
+      if ((taskNotCompletedNode[i].childNodes[1].checked || taskNotCompletedNode[i].classList.contains('task-checked')) && tagNotContains) {
         var taskTag = document.createElement('span');
         taskTag.classList.add('task-tag');
         taskTag.textContent = currentTagText;
